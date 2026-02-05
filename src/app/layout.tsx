@@ -5,6 +5,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
 const GTM_ID = 'GTM-WWCP2T44'
+const HUBSPOT_PORTAL_ID = '244556311'
 
 export const metadata: Metadata = {
   title: {
@@ -40,6 +41,11 @@ export default function RootLayout({
               })(window,document,'script','dataLayer','${GTM_ID}');
             `,
           }}
+        />
+        <Script
+          id="hs-script-loader"
+          src={`//js-na2.hs-scripts.com/${HUBSPOT_PORTAL_ID}.js`}
+          strategy="afterInteractive"
         />
       </head>
       <body className="min-h-screen flex flex-col">
