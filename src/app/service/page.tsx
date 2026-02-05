@@ -165,30 +165,6 @@ export default function ServicePage() {
             ))}
           </div>
 
-          {/* Architecture Note */}
-          <div className="mt-12 bg-primary-50 rounded-2xl p-8 md:p-10">
-            <h3 className="heading-3 text-primary-800 mb-4">設計思想</h3>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div>
-                <h4 className="font-medium text-primary-800 mb-2">責任の分離</h4>
-                <p className="text-sm text-gray-600">
-                  1つのアプリがすべてを担わない設計。各アプリは明確な責任範囲を持ちます。
-                </p>
-              </div>
-              <div>
-                <h4 className="font-medium text-primary-800 mb-2">疎結合</h4>
-                <p className="text-sm text-gray-600">
-                  将来的な追加・分離を前提とした、柔軟なアーキテクチャ。
-                </p>
-              </div>
-              <div>
-                <h4 className="font-medium text-primary-800 mb-2">データの正</h4>
-                <p className="text-sm text-gray-600">
-                  ATSが採用における最終的な意思決定と履歴の正を担います。
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
