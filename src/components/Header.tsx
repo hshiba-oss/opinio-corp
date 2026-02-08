@@ -7,6 +7,7 @@ import { Menu, X } from 'lucide-react'
 const navigation = [
   { name: '会社情報', href: '/about/' },
   { name: '事業内容', href: '/service/' },
+  { name: 'ブログ', href: '/blog/' },
   { name: '採用情報', href: '/recruit/' },
   { name: 'お知らせ', href: '/news/' },
   { name: 'お問い合わせ', href: '/contact/' },

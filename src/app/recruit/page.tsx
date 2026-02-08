@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { publishedJobs } from '@/content/recruit/jobs'
+import { prisma } from '@/lib/prisma'
 import { MapPin, Clock, Building2, ArrowRight, Users, Lightbulb, Target } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -8,7 +8,14 @@ export const metadata: Metadata = {
   description: '株式会社Opinioの採用情報です。一緒にAI時代のキャリアインフラを創りませんか。',
 }
 
-export default function RecruitPage() {
+export const revalidate = 60
+
+export default async function RecruitPage() {
+  const publishedJobs = await prisma.job.findMany({
+    where: { published: true },
+    orderBy: { createdAt: 'desc' },
+  })
+
   return (
     <>
       {/* Hero */}
@@ -42,27 +49,21 @@ export default function RecruitPage() {
                 <Users className="w-7 h-7" />
               </div>
               <h3 className="font-bold text-primary-800 mb-2">The Dream Team</h3>
-              <p className="text-sm text-gray-600">
-                少数精鋭のチームで、互いを高め合いながら成長できる環境
-              </p>
+              <p className="text-sm text-gray-600">少数精鋭のチームで、互いを高め合いながら成長できる環境</p>
             </div>
             <div className="bg-gray-50 rounded-2xl p-6 text-center">
               <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-accent-100 text-accent-600 mb-4">
                 <Lightbulb className="w-7 h-7" />
               </div>
               <h3 className="font-bold text-primary-800 mb-2">Truth First</h3>
-              <p className="text-sm text-gray-600">
-                オープンなコミュニケーションと、率直なフィードバック文化
-              </p>
+              <p className="text-sm text-gray-600">オープンなコミュニケーションと、率直なフィードバック文化</p>
             </div>
             <div className="bg-gray-50 rounded-2xl p-6 text-center">
               <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-primary-100 text-primary-800 mb-4">
                 <Target className="w-7 h-7" />
               </div>
               <h3 className="font-bold text-primary-800 mb-2">Think Big</h3>
-              <p className="text-sm text-gray-600">
-                大きな目標に向かって、裁量を持ってチャレンジできる環境
-              </p>
+              <p className="text-sm text-gray-600">大きな目標に向かって、裁量を持ってチャレンジできる環境</p>
             </div>
           </div>
         </div>
@@ -81,7 +82,7 @@ export default function RecruitPage() {
               {publishedJobs.map((job) => (
                 <Link
                   key={job.id}
-                  href={`/recruit/${job.id}/`}
+                  href={`/recruit/${job.slug}/`}
                   className="block bg-white rounded-xl p-6 border border-gray-200 hover:border-primary-300 hover:shadow-lg transition-all group"
                 >
                   <div className="flex items-start justify-between">
@@ -90,18 +91,9 @@ export default function RecruitPage() {
                         {job.title}
                       </h3>
                       <div className="flex flex-wrap gap-4 text-sm text-gray-500">
-                        <span className="flex items-center gap-1">
-                          <Building2 className="w-4 h-4" />
-                          {job.department}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Clock className="w-4 h-4" />
-                          {job.type}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <MapPin className="w-4 h-4" />
-                          {job.location}
-                        </span>
+                        <span className="flex items-center gap-1"><Building2 className="w-4 h-4" />{job.department}</span>
+                        <span className="flex items-center gap-1"><Clock className="w-4 h-4" />{job.type}</span>
+                        <span className="flex items-center gap-1"><MapPin className="w-4 h-4" />{job.location}</span>
                       </div>
                     </div>
                     <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-accent-500 transition-colors flex-shrink-0" />
@@ -114,14 +106,8 @@ export default function RecruitPage() {
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-200 text-gray-400 mb-4">
                 <Users className="w-8 h-8" />
               </div>
-              <p className="text-gray-600 mb-6">
-                現在、募集中の求人はありません。
-              </p>
-              <p className="text-sm text-gray-500">
-                カジュアル面談は随時受け付けています。
-                <br />
-                ご興味のある方はお問い合わせください。
-              </p>
+              <p className="text-gray-600 mb-6">現在、募集中の求人はありません。</p>
+              <p className="text-sm text-gray-500">カジュアル面談は随時受け付けています。<br />ご興味のある方はお問い合わせください。</p>
             </div>
           )}
         </div>

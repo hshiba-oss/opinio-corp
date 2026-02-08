@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { sortedNews } from '@/content/news/posts'
+import { prisma } from '@/lib/prisma'
 import { Calendar, ArrowRight } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -8,8 +8,9 @@ export const metadata: Metadata = {
   description: '株式会社Opinioからのお知らせ、プレスリリースをご覧いただけます。',
 }
 
-function formatDate(dateString: string) {
-  const date = new Date(dateString)
+export const revalidate = 60
+
+function formatDate(date: Date) {
   return date.toLocaleDateString('ja-JP', {
     year: 'numeric',
     month: '2-digit',
@@ -17,7 +18,12 @@ function formatDate(dateString: string) {
   }).replace(/\//g, '.')
 }
 
-export default function NewsPage() {
+export default async function NewsPage() {
+  const posts = await prisma.newsPost.findMany({
+    where: { published: true },
+    orderBy: { date: 'desc' },
+  })
+
   return (
     <>
       {/* Hero */}
@@ -32,12 +38,12 @@ export default function NewsPage() {
       <section className="section-padding">
         <div className="section-container">
           <div className="max-w-3xl mx-auto">
-            {sortedNews.length > 0 ? (
+            {posts.length > 0 ? (
               <div className="divide-y divide-gray-200">
-                {sortedNews.map((post) => (
+                {posts.map((post) => (
                   <Link
                     key={post.id}
-                    href={`/news/${post.id}/`}
+                    href={`/news/${post.slug}/`}
                     className="block py-6 group hover:bg-gray-50 -mx-4 px-4 rounded-lg transition-colors"
                   >
                     <div className="flex items-start justify-between gap-4">

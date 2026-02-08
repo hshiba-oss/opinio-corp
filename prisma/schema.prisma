@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BlogPost {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  date      DateTime @default(now())
+  category  String   @default("コラム")
+  excerpt   String
+  content   String
+  author    String   @default("Opinio編集部")
+  tags      String[] @default([])
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model NewsPost {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  date      DateTime @default(now())
+  category  String   @default("お知らせ")
+  excerpt   String
+  content   String
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Job {
+  id           String   @id @default(cuid())
+  slug         String   @unique
+  title        String
+  department   String
+  type         String   @default("正社員")
+  location     String   @default("東京都港区（リモート可）")
+  description  String
+  requirements String[] @default([])
+  preferred    String[] @default([])
+  benefits     String[] @default([])
+  published    Boolean  @default(false)
+  publishedAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
