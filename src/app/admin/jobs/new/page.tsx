@@ -61,7 +61,7 @@ export default function NewJob() {
   const TextArea = ({ label, field, rows = 4, placeholder = '' }: { label: string; field: string; rows?: number; placeholder?: string }) => (
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
-      <textarea rows={rows} value={(form as Record<string, string>)[field] || ''} onChange={(e) => setForm({ ...form, [field]: e.target.value })} placeholder={placeholder} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-400 focus:border-transparent outline-none text-sm" />
+      <textarea rows={rows} value={String((form as Record<string, unknown>)[field] ?? '')} onChange={(e) => setForm({ ...form, [field]: e.target.value })} placeholder={placeholder} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-400 focus:border-transparent outline-none text-sm" />
     </div>
   )
 
