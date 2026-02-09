@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
+import { revalidatePath } from 'next/cache'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
@@ -31,5 +32,11 @@ export async function POST(req: NextRequest) {
       published: body.published ?? false,
     },
   })
+
+  revalidatePath('/blog')
+  if (post.published) {
+    revalidatePath(`/blog/${post.slug}`)
+  }
+
   return NextResponse.json(post, { status: 201 })
 }

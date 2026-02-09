@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
+import { revalidatePath } from 'next/cache'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
@@ -33,6 +34,11 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       publishedAt: body.published ? new Date() : null,
     },
   })
+
+  // 公開ページのキャッシュを即座に無効化
+  revalidatePath('/recruit')
+  revalidatePath(`/recruit/${job.slug}`)
+
   return NextResponse.json(job)
 }
 
@@ -40,6 +46,15 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
   const session = await getServerSession(authOptions)
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
+  // 削除前にslugを取得（キャッシュ無効化用）
+  const job = await prisma.job.findUnique({ where: { id: params.id } })
   await prisma.job.delete({ where: { id: params.id } })
+
+  // 公開ページのキャッシュを即座に無効化
+  revalidatePath('/recruit')
+  if (job?.slug) {
+    revalidatePath(`/recruit/${job.slug}`)
+  }
+
   return NextResponse.json({ success: true })
 }

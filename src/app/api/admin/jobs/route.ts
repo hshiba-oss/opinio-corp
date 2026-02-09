@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
+import { revalidatePath } from 'next/cache'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
@@ -33,5 +34,12 @@ export async function POST(req: NextRequest) {
       publishedAt: body.published ? new Date() : null,
     },
   })
+
+  // 公開ページのキャッシュを即座に無効化
+  revalidatePath('/recruit')
+  if (job.published) {
+    revalidatePath(`/recruit/${job.slug}`)
+  }
+
   return NextResponse.json(job, { status: 201 })
 }
