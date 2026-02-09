@@ -58,7 +58,7 @@ export default async function RecruitDetailPage({ params }: Props) {
           <div className="max-w-3xl mx-auto space-y-10">
             <div>
               <h2 className="heading-3 text-primary-800 mb-4">業務内容</h2>
-              <p className="text-gray-700 leading-relaxed">{job.description}</p>
+              <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{job.description}</p>
             </div>
 
             {job.requirements.length > 0 && (

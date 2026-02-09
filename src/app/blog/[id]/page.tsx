@@ -84,7 +84,7 @@ export default async function BlogDetailPage({ params }: Props) {
                   )
                 }
                 return (
-                  <p key={index} className="mb-4 leading-relaxed text-gray-700">
+                  <p key={index} className="mb-4 leading-relaxed text-gray-700 whitespace-pre-wrap">
                     {paragraph}
                   </p>
                 )

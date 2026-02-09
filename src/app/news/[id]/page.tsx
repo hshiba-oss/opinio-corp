@@ -76,7 +76,7 @@ export default async function NewsDetailPage({ params }: Props) {
           <div className="max-w-3xl mx-auto">
             <div className="prose prose-gray max-w-none">
               {post.content.split('\n\n').map((paragraph, index) => (
-                <p key={index} className="mb-4 leading-relaxed text-gray-700">
+                <p key={index} className="mb-4 leading-relaxed text-gray-700 whitespace-pre-wrap">
                   {paragraph}
                 </p>
               ))}
