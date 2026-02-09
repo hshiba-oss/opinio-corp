@@ -46,18 +46,25 @@ model NewsPost {
 }
 
 model Job {
-  id           String   @id @default(cuid())
-  slug         String   @unique
-  title        String
-  department   String
-  type         String   @default("正社員")
-  location     String   @default("東京都港区（リモート可）")
-  description  String
-  requirements String[] @default([])
-  preferred    String[] @default([])
-  benefits     String[] @default([])
-  published    Boolean  @default(false)
-  publishedAt  DateTime?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id               String   @id @default(cuid())
+  slug             String   @unique
+  title            String
+  department       String
+  type             String   @default("正社員")
+  location         String   @default("東京都港区（リモート可）")
+  description      String
+  requirements     String[] @default([])
+  preferred        String[] @default([])
+  targetAudience   String?  // 対象となる方
+  locationDetail   String?  // 勤務地詳細
+  workHours        String?  // 勤務時間
+  employmentDetail String?  // 雇用形態詳細
+  salary           String?  // 給与
+  welfare          String?  // 待遇・福利厚生
+  holidays         String?  // 休日・休暇
+  benefits         String[] @default([])
+  published        Boolean  @default(false)
+  publishedAt      DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
