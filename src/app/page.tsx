@@ -8,7 +8,19 @@ export default function Home() {
     <>
       {/* Hero Section */}
       <section className="relative text-white overflow-hidden bg-primary-800 min-h-[600px]">
-        {/* Floating diamond photos */}
+        {/* Canva background with CEO diamond */}
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url('/images/opiniocorpherobackground.png')" }}
+        />
+        {/* Navy overlay on left for text readability */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(to right, rgba(45,42,91,0.85) 0%, rgba(45,42,91,0.6) 35%, rgba(45,42,91,0.3) 55%, transparent 75%)',
+          }}
+        />
+        {/* Floating diamond photos on top */}
         <DiamondCarousel />
         <div className="section-container section-padding relative">
           <div className="max-w-3xl">
