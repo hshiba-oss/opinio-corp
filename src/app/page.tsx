@@ -189,7 +189,7 @@ export default function Home() {
             <div className="flex items-center justify-center">
               <div className="relative w-64 h-64 md:w-80 md:h-80">
                 <Image
-                  src="/images/ceo2-circle.png"
+                  src="/images/dsc1636-circle.png"
                   alt="代表取締役 柴 久人"
                   fill
                   className="object-contain"
