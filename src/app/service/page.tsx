@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { Briefcase, Code, Users, FileText, MessageSquare, Globe, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import PageHeader from '@/components/PageHeader'
+import { prisma } from '@/lib/prisma'
 
 export const metadata: Metadata = {
   title: '事業内容',
@@ -35,7 +36,17 @@ const saasProducts = [
   },
 ]
 
-export default function ServicePage() {
+export default async function ServicePage() {
+  const consultingLogos = await prisma.logo.findMany({
+    where: { published: true, category: 'consulting' },
+    orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
+  })
+
+  const saasLogos = await prisma.logo.findMany({
+    where: { published: true, category: 'saas' },
+    orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
+  })
+
   return (
     <>
       <PageHeader subtitle="SERVICE" title="事業内容" />
@@ -114,6 +125,30 @@ export default function ServicePage() {
               </div>
             </div>
           </div>
+
+          {/* Consulting Logos */}
+          {consultingLogos.length > 0 && (
+            <div className="mt-16">
+              <h3 className="text-center text-sm font-medium text-gray-500 uppercase tracking-wider mb-8">
+                導入企業実績
+              </h3>
+              <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                {consultingLogos.map((logo) => (
+                  <div
+                    key={logo.id}
+                    className="bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-center aspect-[3/2] hover:shadow-md transition-shadow"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={logo.imageUrl}
+                      alt={logo.name}
+                      className="max-h-full max-w-full object-contain grayscale hover:grayscale-0 transition-all opacity-70 hover:opacity-100"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -159,6 +194,30 @@ export default function ServicePage() {
               </div>
             ))}
           </div>
+
+          {/* SaaS Logos */}
+          {saasLogos.length > 0 && (
+            <div className="mt-16">
+              <h3 className="text-center text-sm font-medium text-gray-500 uppercase tracking-wider mb-8">
+                導入企業実績
+              </h3>
+              <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                {saasLogos.map((logo) => (
+                  <div
+                    key={logo.id}
+                    className="bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-center aspect-[3/2] hover:shadow-md transition-shadow"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={logo.imageUrl}
+                      alt={logo.name}
+                      className="max-h-full max-w-full object-contain grayscale hover:grayscale-0 transition-all opacity-70 hover:opacity-100"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
         </div>
       </section>

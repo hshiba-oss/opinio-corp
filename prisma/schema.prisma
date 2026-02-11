@@ -68,3 +68,14 @@ model Job {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }
+
+model Logo {
+  id        String   @id @default(cuid())
+  name      String                          // 企業名
+  imageUrl  String                          // ロゴ画像URL（/images/logos/xxx.png）
+  category  String   @default("consulting") // "consulting" or "saas"
+  order     Int      @default(0)            // 表示順（小さいほど先）
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -2,35 +2,39 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { FileText, Newspaper, Briefcase, Plus } from 'lucide-react'
+import { FileText, Newspaper, Briefcase, Plus, Image } from 'lucide-react'
 
 interface Counts {
   blog: number
   news: number
   jobs: number
+  logos: number
 }
 
 export default function AdminDashboard() {
-  const [counts, setCounts] = useState<Counts>({ blog: 0, news: 0, jobs: 0 })
+  const [counts, setCounts] = useState<Counts>({ blog: 0, news: 0, jobs: 0, logos: 0 })
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchCounts() {
       try {
-        const [blogRes, newsRes, jobsRes] = await Promise.all([
+        const [blogRes, newsRes, jobsRes, logosRes] = await Promise.all([
           fetch('/api/admin/blog'),
           fetch('/api/admin/news'),
           fetch('/api/admin/jobs'),
+          fetch('/api/admin/logos'),
         ])
-        const [blog, news, jobs] = await Promise.all([
+        const [blog, news, jobs, logos] = await Promise.all([
           blogRes.json(),
           newsRes.json(),
           jobsRes.json(),
+          logosRes.json(),
         ])
         setCounts({
           blog: Array.isArray(blog) ? blog.length : 0,
           news: Array.isArray(news) ? news.length : 0,
           jobs: Array.isArray(jobs) ? jobs.length : 0,
+          logos: Array.isArray(logos) ? logos.length : 0,
         })
       } catch (e) {
         console.error('Failed to fetch counts', e)
@@ -45,6 +49,7 @@ export default function AdminDashboard() {
     { name: 'ブログ記事', count: counts.blog, icon: FileText, href: '/admin/blog', newHref: '/admin/blog/new', color: 'bg-primary-100 text-primary-800' },
     { name: 'お知らせ', count: counts.news, icon: Newspaper, href: '/admin/news', newHref: '/admin/news/new', color: 'bg-accent-100 text-accent-700' },
     { name: '採用情報', count: counts.jobs, icon: Briefcase, href: '/admin/jobs', newHref: '/admin/jobs/new', color: 'bg-teal-100 text-teal-700' },
+    { name: '導入企業ロゴ', count: counts.logos, icon: Image, href: '/admin/logos', newHref: '/admin/logos/new', color: 'bg-purple-100 text-purple-700' },
   ]
 
   return (
@@ -54,7 +59,7 @@ export default function AdminDashboard() {
       {loading ? (
         <div className="text-gray-500">読み込み中...</div>
       ) : (
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {cards.map((card) => {
             const Icon = card.icon
             return (

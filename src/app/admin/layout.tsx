@@ -4,13 +4,14 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
 import { SessionProvider } from 'next-auth/react'
-import { FileText, Newspaper, Briefcase, LayoutDashboard, LogOut } from 'lucide-react'
+import { FileText, Newspaper, Briefcase, LayoutDashboard, LogOut, Image } from 'lucide-react'
 
 const adminNav = [
   { name: 'ダッシュボード', href: '/admin', icon: LayoutDashboard },
   { name: 'ブログ', href: '/admin/blog', icon: FileText },
   { name: 'お知らせ', href: '/admin/news', icon: Newspaper },
   { name: '採用情報', href: '/admin/jobs', icon: Briefcase },
+  { name: '導入企業ロゴ', href: '/admin/logos', icon: Image },
 ]
 
 function AdminSidebar() {
