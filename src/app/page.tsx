@@ -5,12 +5,14 @@ export default function Home() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative text-white overflow-hidden">
+      <section className="relative text-white overflow-hidden bg-primary-800">
+        {/* Right-aligned photo */}
         <div
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-y-0 right-0 w-1/2 md:w-[55%] bg-cover bg-center"
           style={{ backgroundImage: "url('/images/hero-ceo-processed.jpg')" }}
         />
-        <div className="absolute inset-0 bg-primary-800/60" />
+        {/* Left gradient overlay fading into the photo */}
+        <div className="absolute inset-0 bg-gradient-to-r from-primary-800 via-primary-800/95 via-40% to-primary-800/30" />
         <div className="section-container section-padding relative">
           <div className="max-w-3xl">
             <p className="text-accent-400 font-medium mb-4 tracking-wide">
