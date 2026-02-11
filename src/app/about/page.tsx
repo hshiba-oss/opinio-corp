@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Image from 'next/image'
 import { Target, Lightbulb, Users, Award, Building2, MapPin } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -121,8 +122,56 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Company Overview */}
+      {/* CEO Message */}
       <section className="section-padding bg-gray-50">
+        <div className="section-container">
+          <div className="text-center mb-12">
+            <p className="text-accent-500 font-medium mb-2">MESSAGE</p>
+            <h2 className="heading-2 text-primary-800">代表メッセージ</h2>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
+            <div className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-lg">
+              <Image
+                src="/images/ceo-processed.jpg"
+                alt="代表取締役 柴 久人"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                priority
+              />
+            </div>
+            <div>
+              <h3 className="text-2xl md:text-3xl font-bold text-primary-800 mb-6 leading-tight">
+                すべての人が、
+                <br />
+                自分のキャリアに
+                <br />
+                納得できる社会へ。
+              </h3>
+              <div className="space-y-4 text-gray-600 leading-relaxed">
+                <p>
+                  キャリアの意思決定は、人生において最も重要な選択のひとつです。
+                  しかし、情報の非対称性や不透明さにより、
+                  多くの人が納得のいかない選択を余儀なくされています。
+                </p>
+                <p>
+                  私たちOpinioは、AI時代のキャリアインフラとして、
+                  透明で信頼できる情報基盤を構築し、
+                  すべての人が自分らしいキャリアを歩める社会を実現します。
+                </p>
+              </div>
+              <div className="mt-8 pt-6 border-t border-gray-200">
+                <p className="text-sm text-gray-500 mb-1">代表取締役</p>
+                <p className="text-xl font-bold text-primary-800">柴 久人</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Company Overview */}
+      <section className="section-padding">
         <div className="section-container">
           <div className="text-center mb-12">
             <p className="text-accent-500 font-medium mb-2">COMPANY</p>
