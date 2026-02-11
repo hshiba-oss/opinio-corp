@@ -131,9 +131,9 @@ export default function AboutPage() {
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
-            <div className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-lg">
+            <div className="relative aspect-square rounded-2xl overflow-hidden shadow-lg">
               <Image
-                src="/images/ceo-processed.jpg"
+                src="/images/ceo1.png"
                 alt="代表取締役 柴 久人"
                 fill
                 className="object-cover"
