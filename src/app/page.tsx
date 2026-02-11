@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { ArrowRight, Users, Lightbulb, Target, Briefcase, Code } from 'lucide-react'
+import Image from 'next/image'
+import { ArrowRight, Lightbulb, Target, Briefcase, Code } from 'lucide-react'
 
 export default function Home() {
   return (
@@ -186,10 +187,14 @@ export default function Home() {
               </Link>
             </div>
             <div className="flex items-center justify-center">
-              <div className="relative">
-                <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-primary-700/50 flex items-center justify-center">
-                  <Users className="w-24 h-24 md:w-32 md:h-32 text-primary-300" />
-                </div>
+              <div className="relative w-64 h-64 md:w-80 md:h-80">
+                <Image
+                  src="/images/ceo2-circle.png"
+                  alt="代表取締役 柴 久人"
+                  fill
+                  className="object-contain"
+                  sizes="320px"
+                />
               </div>
             </div>
           </div>
