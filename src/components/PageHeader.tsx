@@ -10,12 +10,12 @@ export default function PageHeader({ subtitle, title, description, compact = fal
     <section className={`relative text-white overflow-hidden bg-primary-800 ${compact ? 'py-16 md:py-20' : 'py-20 md:py-28'}`}>
       <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/images/hero-ceo-processed.jpg')" }}
+        style={{ backgroundImage: "url('/images/opiniocorpherobackground.png')" }}
       />
       <div
         className="absolute inset-0"
         style={{
-          background: 'linear-gradient(135deg, #2d2a5b 0%, #2d2a5b 35%, rgba(45,42,91,0.6) 55%, rgba(45,42,91,0.15) 75%, transparent 100%)',
+          background: 'linear-gradient(to right, rgba(45,42,91,0.5) 0%, rgba(45,42,91,0.2) 40%, transparent 60%)',
         }}
       />
       <div className="section-container relative">

@@ -12,11 +12,11 @@ export default function Home() {
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: "url('/images/opiniocorpherobackground.png')" }}
         />
-        {/* Navy overlay on left for text readability */}
+        {/* Light overlay on left for text readability */}
         <div
           className="absolute inset-0"
           style={{
-            background: 'linear-gradient(to right, #2d2a5b 0%, #2d2a5b 30%, rgba(45,42,91,0.85) 45%, rgba(45,42,91,0.3) 65%, transparent 80%)',
+            background: 'linear-gradient(to right, rgba(45,42,91,0.5) 0%, rgba(45,42,91,0.2) 40%, transparent 60%)',
           }}
         />
         <div className="section-container section-padding relative">
