@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { Mail, Building2, Clock } from 'lucide-react'
 import HubSpotForm from '@/components/HubSpotForm'
+import PageHeader from '@/components/PageHeader'
 
 export const metadata: Metadata = {
   title: 'お問い合わせ',
@@ -10,16 +11,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
-      {/* Hero */}
-      <section className="bg-primary-800 text-white py-20 md:py-28">
-        <div className="section-container">
-          <p className="text-accent-400 font-medium mb-4">CONTACT</p>
-          <h1 className="heading-1 mb-4">お問い合わせ</h1>
-          <p className="text-xl text-gray-300">
-            お気軽にご連絡ください
-          </p>
-        </div>
-      </section>
+      <PageHeader subtitle="CONTACT" title="お問い合わせ" description="お気軽にご連絡ください" />
 
       {/* Contact Info + Form */}
       <section className="section-padding">

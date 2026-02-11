@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { Calendar, Tag } from 'lucide-react'
+import PageHeader from '@/components/PageHeader'
 
 export const metadata: Metadata = {
   title: 'ブログ',
@@ -33,16 +34,7 @@ export default async function BlogPage() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="bg-primary-800 text-white py-20 md:py-28">
-        <div className="section-container">
-          <p className="text-accent-400 font-medium mb-4">BLOG</p>
-          <h1 className="heading-1">ブログ</h1>
-          <p className="text-gray-300 mt-4">
-            キャリア・HR Tech・採用に関するナレッジやコラムをお届けします
-          </p>
-        </div>
-      </section>
+      <PageHeader subtitle="BLOG" title="ブログ" description="キャリア・HR Tech・採用に関するナレッジやコラムをお届けします" />
 
       {/* Blog List */}
       <section className="section-padding">

@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { Calendar, ArrowRight } from 'lucide-react'
+import PageHeader from '@/components/PageHeader'
 
 export const metadata: Metadata = {
   title: 'お知らせ',
@@ -26,13 +27,7 @@ export default async function NewsPage() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="bg-primary-800 text-white py-20 md:py-28">
-        <div className="section-container">
-          <p className="text-accent-400 font-medium mb-4">NEWS</p>
-          <h1 className="heading-1">お知らせ</h1>
-        </div>
-      </section>
+      <PageHeader subtitle="NEWS" title="お知らせ" />
 
       {/* News List */}
       <section className="section-padding">

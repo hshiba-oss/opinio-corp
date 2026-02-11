@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import PageHeader from '@/components/PageHeader'
 
 export const metadata: Metadata = {
   title: 'プライバシーポリシー',
@@ -8,12 +9,7 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <>
-      {/* Hero */}
-      <section className="bg-primary-800 text-white py-20 md:py-28">
-        <div className="section-container">
-          <h1 className="heading-1">プライバシーポリシー</h1>
-        </div>
-      </section>
+      <PageHeader title="プライバシーポリシー" />
 
       {/* Content */}
       <section className="section-padding">

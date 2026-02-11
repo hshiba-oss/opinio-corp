@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { Briefcase, Code, Users, FileText, MessageSquare, Globe, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import PageHeader from '@/components/PageHeader'
 
 export const metadata: Metadata = {
   title: '事業内容',
@@ -37,13 +38,7 @@ const saasProducts = [
 export default function ServicePage() {
   return (
     <>
-      {/* Hero */}
-      <section className="bg-primary-800 text-white py-20 md:py-28">
-        <div className="section-container">
-          <p className="text-accent-400 font-medium mb-4">SERVICE</p>
-          <h1 className="heading-1">事業内容</h1>
-        </div>
-      </section>
+      <PageHeader subtitle="SERVICE" title="事業内容" />
 
       {/* Intro */}
       <section className="section-padding">

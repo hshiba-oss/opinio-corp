@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { MapPin, Clock, Building2, ArrowRight, Users, Lightbulb, Target } from 'lucide-react'
+import PageHeader from '@/components/PageHeader'
 
 export const metadata: Metadata = {
   title: '採用情報',
@@ -18,16 +19,7 @@ export default async function RecruitPage() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="bg-primary-800 text-white py-20 md:py-28">
-        <div className="section-container">
-          <p className="text-accent-400 font-medium mb-4">RECRUIT</p>
-          <h1 className="heading-1 mb-4">採用情報</h1>
-          <p className="text-xl text-gray-300">
-            一緒にAI時代のキャリアインフラを創りませんか
-          </p>
-        </div>
-      </section>
+      <PageHeader subtitle="RECRUIT" title="採用情報" description="一緒にAI時代のキャリアインフラを創りませんか" />
 
       {/* Culture */}
       <section className="section-padding">

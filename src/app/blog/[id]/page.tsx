@@ -42,8 +42,10 @@ export default async function BlogDetailPage({ params }: Props) {
   return (
     <>
       {/* Hero */}
-      <section className="bg-primary-800 text-white py-16 md:py-20">
-        <div className="section-container">
+      <section className="relative text-white overflow-hidden bg-primary-800 py-16 md:py-20">
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/images/hero-ceo-processed.jpg')" }} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #2d2a5b 0%, #2d2a5b 35%, rgba(45,42,91,0.6) 55%, rgba(45,42,91,0.15) 75%, transparent 100%)' }} />
+        <div className="section-container relative">
           <Link
             href="/blog/"
             className="inline-flex items-center text-sm text-gray-300 hover:text-white mb-4 transition-colors"

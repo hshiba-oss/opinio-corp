@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
 import { Target, Lightbulb, Users, Award, Building2, MapPin } from 'lucide-react'
+import PageHeader from '@/components/PageHeader'
 
 export const metadata: Metadata = {
   title: '会社情報',
@@ -21,13 +22,7 @@ const companyInfo = [
 export default function AboutPage() {
   return (
     <>
-      {/* Hero */}
-      <section className="bg-primary-800 text-white py-20 md:py-28">
-        <div className="section-container">
-          <p className="text-accent-400 font-medium mb-4">ABOUT US</p>
-          <h1 className="heading-1">会社情報</h1>
-        </div>
-      </section>
+      <PageHeader subtitle="ABOUT US" title="会社情報" />
 
       {/* Vision & Mission */}
       <section className="section-padding">
