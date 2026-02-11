@@ -7,16 +7,16 @@ export default function Home() {
     <>
       {/* Hero Section */}
       <section className="relative text-white overflow-hidden bg-primary-800">
-        {/* Full background photo */}
+        {/* Photo on the right side only */}
         <div
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-y-0 right-0 w-[45%] md:w-[40%] bg-cover bg-center hidden md:block"
           style={{ backgroundImage: "url('/images/hero-ceo-processed.jpg')" }}
         />
-        {/* Diagonal gradient overlay: top-left navy → bottom-right transparent */}
+        {/* Soft blend from navy into the photo */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-y-0 right-[25%] w-[20%] hidden md:block"
           style={{
-            background: 'linear-gradient(135deg, #2d2a5b 0%, #2d2a5b 35%, rgba(45,42,91,0.6) 55%, rgba(45,42,91,0.15) 75%, transparent 100%)',
+            background: 'linear-gradient(to right, #2d2a5b, transparent)',
           }}
         />
         <div className="section-container section-padding relative">
