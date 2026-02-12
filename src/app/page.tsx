@@ -6,17 +6,33 @@ import DiamondCarousel from '@/components/DiamondCarousel'
 export default function Home() {
   return (
     <>
+      {/* Preload LCP hero background */}
+      <link
+        rel="preload"
+        as="image"
+        href="/images/opiniocorpherobackground.webp"
+        type="image/webp"
+        media="(min-width: 768px)"
+      />
+      <link
+        rel="preload"
+        as="image"
+        href="/images/hero-mobile-bg.webp"
+        type="image/webp"
+        media="(max-width: 767px)"
+      />
+
       {/* Hero Section */}
       <section className="relative text-white overflow-hidden bg-primary-800 min-h-[calc(100svh-4rem)] md:min-h-[600px]">
         {/* Mobile background */}
         <div
           className="absolute inset-0 bg-cover bg-center md:hidden"
-          style={{ backgroundImage: "url('/images/hero-mobile-bg.png')" }}
+          style={{ backgroundImage: "url('/images/hero-mobile-bg.webp')" }}
         />
         {/* Desktop background */}
         <div
           className="absolute inset-0 bg-cover bg-center hidden md:block"
-          style={{ backgroundImage: "url('/images/opiniocorpherobackground.png')" }}
+          style={{ backgroundImage: "url('/images/opiniocorpherobackground.webp')" }}
         />
         {/* Overlay for text readability */}
         <div
@@ -213,6 +229,7 @@ export default function Home() {
                   fill
                   className="object-contain"
                   sizes="320px"
+                  loading="lazy"
                 />
               </div>
             </div>

@@ -11,12 +11,12 @@ export default function PageHeader({ subtitle, title, description, compact = fal
       {/* Mobile background */}
       <div
         className="absolute inset-0 bg-cover bg-center md:hidden"
-        style={{ backgroundImage: "url('/images/page-header-mobile-bg.png')" }}
+        style={{ backgroundImage: "url('/images/page-header-mobile-bg.webp')" }}
       />
       {/* Desktop background */}
       <div
         className="absolute inset-0 bg-cover bg-center hidden md:block"
-        style={{ backgroundImage: "url('/images/page-header-bg.png')" }}
+        style={{ backgroundImage: "url('/images/page-header-bg.webp')" }}
       />
       {/* Overlay */}
       <div

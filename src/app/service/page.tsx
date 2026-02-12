@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Image from 'next/image'
 import { Briefcase, Code, Users, FileText, MessageSquare, Globe, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import PageHeader from '@/components/PageHeader'
@@ -120,11 +121,14 @@ export default async function ServicePage() {
               </Link>
             </div>
             <div className="relative">
-              <div className="rounded-2xl aspect-square overflow-hidden">
-                <img
+              <div className="rounded-2xl aspect-square overflow-hidden relative">
+                <Image
                   src="/images/consulting-image.png"
                   alt="キャリアコンサルティング事業"
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  loading="lazy"
                 />
               </div>
             </div>

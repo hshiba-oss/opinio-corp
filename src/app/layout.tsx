@@ -57,7 +57,7 @@ export default function RootLayout({
         <Script
           id="hs-script-loader"
           src={`//js-na2.hs-scripts.com/${HUBSPOT_PORTAL_ID}.js`}
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
       </head>
       <body className="min-h-screen flex flex-col">
