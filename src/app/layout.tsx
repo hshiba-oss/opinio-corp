@@ -18,6 +18,18 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'ja_JP',
     siteName: '株式会社Opinio',
+    images: [
+      {
+        url: 'https://opinio.co.jp/images/ogp.png',
+        width: 1200,
+        height: 630,
+        alt: '株式会社Opinio | AI時代のキャリアインフラ',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['https://opinio.co.jp/images/ogp.png'],
   },
 }
 
