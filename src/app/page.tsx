@@ -7,42 +7,53 @@ export default function Home() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative text-white overflow-hidden bg-primary-800 min-h-[600px]">
-        {/* Canva background with CEO diamond */}
+      <section className="relative text-white overflow-hidden bg-primary-800 min-h-[calc(100svh-4rem)] md:min-h-[600px]">
+        {/* Mobile background */}
         <div
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-0 bg-cover bg-center md:hidden"
+          style={{ backgroundImage: "url('/images/hero-mobile-bg.png')" }}
+        />
+        {/* Desktop background */}
+        <div
+          className="absolute inset-0 bg-cover bg-center hidden md:block"
           style={{ backgroundImage: "url('/images/opiniocorpherobackground.png')" }}
         />
-        {/* Navy overlay on left for text readability */}
+        {/* Overlay for text readability */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 md:bg-transparent"
+          style={{
+            background: 'linear-gradient(to bottom, rgba(45,42,91,0.4) 0%, rgba(45,42,91,0.7) 50%, rgba(45,42,91,0.85) 100%)',
+          }}
+        />
+        <div
+          className="absolute inset-0 hidden md:block"
           style={{
             background: 'linear-gradient(to right, rgba(45,42,91,0.85) 0%, rgba(45,42,91,0.6) 35%, rgba(45,42,91,0.3) 55%, transparent 75%)',
           }}
         />
-        {/* Floating diamond photos on top */}
+        {/* Floating diamond photos - desktop only */}
         <DiamondCarousel />
-        <div className="section-container section-padding relative">
+        <div className="section-container relative flex items-end md:items-center min-h-[calc(100svh-4rem)] md:min-h-[600px] pb-12 pt-8 md:py-24">
           <div className="max-w-3xl">
-            <p className="text-accent-400 font-medium mb-4 tracking-wide">
+            <p className="text-accent-400 font-medium mb-3 md:mb-4 tracking-wide text-sm md:text-base">
               AI時代のキャリアインフラ
             </p>
-            <h1 className="heading-1 mb-6 leading-tight">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-4 md:mb-6 leading-tight">
               すべての選択肢に、
               <br />
               <span className="text-accent-400">納得のいくストーリー</span>を。
             </h1>
-            <p className="text-lg text-gray-300 mb-8 leading-relaxed">
+            <p className="text-base md:text-lg text-gray-300 mb-6 md:mb-8 leading-relaxed">
               Opinioは、キャリアコンサルティングとHR Techの両輪で、
               <br className="hidden md:block" />
               人と組織のより良い出会いを実現します。
             </p>
-            <div className="flex flex-wrap gap-4">
-              <Link href="/service/" className="btn-primary">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <Link href="/service/" className="btn-primary text-center">
                 事業内容を見る
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Link>
-              <Link href="/contact/" className="btn-outline border-white text-white hover:bg-white hover:text-primary-800">
+              <Link href="/contact/" className="btn-outline border-white text-white hover:bg-white hover:text-primary-800 text-center">
                 お問い合わせ
               </Link>
             </div>

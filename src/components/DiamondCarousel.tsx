@@ -9,7 +9,7 @@ const people = [
 
 export default function DiamondCarousel() {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div className="hidden md:block absolute inset-0 overflow-hidden pointer-events-none">
       {/* Diamond 1 - person1, upper area */}
       <div
         className="absolute w-28 h-28 md:w-40 md:h-40 rounded-2xl overflow-hidden border-4 border-white/20 shadow-2xl"
