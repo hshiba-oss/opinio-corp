@@ -8,10 +8,17 @@ type PageHeaderProps = {
 export default function PageHeader({ subtitle, title, description, compact = false }: PageHeaderProps) {
   return (
     <section className={`relative text-white overflow-hidden bg-primary-800 ${compact ? 'py-16 md:py-20' : 'py-20 md:py-28'}`}>
+      {/* Mobile background */}
       <div
-        className="absolute inset-0 bg-cover bg-center"
+        className="absolute inset-0 bg-cover bg-center md:hidden"
+        style={{ backgroundImage: "url('/images/page-header-mobile-bg.png')" }}
+      />
+      {/* Desktop background */}
+      <div
+        className="absolute inset-0 bg-cover bg-center hidden md:block"
         style={{ backgroundImage: "url('/images/page-header-bg.png')" }}
       />
+      {/* Overlay */}
       <div
         className="absolute inset-0"
         style={{
