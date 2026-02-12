@@ -10,7 +10,7 @@ export default function PageHeader({ subtitle, title, description, compact = fal
     <section className={`relative text-white overflow-hidden bg-primary-800 ${compact ? 'py-16 md:py-20' : 'py-20 md:py-28'}`}>
       <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/images/opiniocorpherobackground.png')" }}
+        style={{ backgroundImage: "url('/images/page-header-bg.png')" }}
       />
       <div
         className="absolute inset-0"
