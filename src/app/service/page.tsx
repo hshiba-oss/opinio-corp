@@ -120,8 +120,12 @@ export default async function ServicePage() {
               </Link>
             </div>
             <div className="relative">
-              <div className="bg-gradient-to-br from-primary-100 to-primary-50 rounded-2xl aspect-square flex items-center justify-center">
-                <Briefcase className="w-32 h-32 text-primary-300" />
+              <div className="rounded-2xl aspect-square overflow-hidden">
+                <img
+                  src="/images/consulting-image.png"
+                  alt="キャリアコンサルティング事業"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
           </div>
