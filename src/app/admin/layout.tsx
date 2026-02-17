@@ -1,9 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
 import { SessionProvider } from 'next-auth/react'
+import { useEffect } from 'react'
 import { FileText, Newspaper, Briefcase, LayoutDashboard, LogOut, Image } from 'lucide-react'
 
 const adminNav = [
@@ -63,10 +64,19 @@ function AdminSidebar() {
 
 function AdminContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
+  const router = useRouter()
   const { data: session, status } = useSession()
 
-  // ログインページはサイドバーなし
-  if (pathname === '/admin/login') {
+  // ログインページはセッションチェック不要、サイドバーなし
+  const isLoginPage = pathname === '/admin/login'
+
+  useEffect(() => {
+    if (!isLoginPage && status === 'unauthenticated') {
+      router.replace('/admin/login')
+    }
+  }, [status, isLoginPage, router])
+
+  if (isLoginPage) {
     return <>{children}</>
   }
 
@@ -79,11 +89,8 @@ function AdminContent({ children }: { children: React.ReactNode }) {
     )
   }
 
-  // 未認証の場合はログインページへリダイレクト
+  // 未認証の場合（useEffectでリダイレクト中）
   if (!session) {
-    if (typeof window !== 'undefined') {
-      window.location.href = '/admin/login'
-    }
     return null
   }
 
