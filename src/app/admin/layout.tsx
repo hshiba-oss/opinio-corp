@@ -67,8 +67,8 @@ function AdminContent({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const { data: session, status } = useSession()
 
-  // ログインページはセッションチェック不要、サイドバーなし
-  const isLoginPage = pathname === '/admin/login'
+  // ログインページはセッションチェック不要、サイドバーなし（trailingSlash対応）
+  const isLoginPage = pathname === '/admin/login' || pathname === '/admin/login/'
 
   useEffect(() => {
     if (!isLoginPage && status === 'unauthenticated') {
