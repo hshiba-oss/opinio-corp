@@ -150,7 +150,7 @@ export default async function ServicePage() {
                     <img
                       src={logo.imageUrl}
                       alt={logo.name}
-                      className="max-h-full max-w-full object-contain grayscale hover:grayscale-0 transition-all opacity-70 hover:opacity-100"
+                      className="max-h-full max-w-full object-contain"
                     />
                   </div>
                 ))}
@@ -219,7 +219,7 @@ export default async function ServicePage() {
                     <img
                       src={logo.imageUrl}
                       alt={logo.name}
-                      className="max-h-full max-w-full object-contain grayscale hover:grayscale-0 transition-all opacity-70 hover:opacity-100"
+                      className="max-h-full max-w-full object-contain"
                     />
                   </div>
                 ))}
