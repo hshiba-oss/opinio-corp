@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
 import Script from 'next/script'
 import './globals.css'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
+import PublicLayout from '@/components/PublicLayout'
 
 const GTM_ID = 'GTM-WWCP2T44'
 const HUBSPOT_PORTAL_ID = '244556311'
@@ -69,9 +68,7 @@ export default function RootLayout({
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
-        <Header />
-        <main className="flex-1 pt-16 md:pt-20">{children}</main>
-        <Footer />
+        <PublicLayout>{children}</PublicLayout>
       </body>
     </html>
   )
