@@ -109,7 +109,7 @@ export default function HubSpotForm() {
           value={formData.lastname}
           onChange={handleChange}
           required
-          placeholder="例）早野 龍輝"
+          placeholder="例）山田 太郎"
           className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-base
                      focus:outline-none focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20
                      placeholder:text-gray-400 transition-colors"
