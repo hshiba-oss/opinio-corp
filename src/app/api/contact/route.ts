@@ -44,10 +44,10 @@ export async function POST(req: NextRequest) {
     )
 
     if (!hubspotRes.ok) {
-      const errorData = await hubspotRes.json().catch(() => null)
-      console.error('HubSpot API error:', hubspotRes.status, errorData)
+      const errorText = await hubspotRes.text().catch(() => '')
+      console.error('HubSpot API error:', hubspotRes.status, errorText)
       return NextResponse.json(
-        { error: '送信に失敗しました。時間をおいて再度お試しください。' },
+        { error: '送信に失敗しました。時間をおいて再度お試しください。', debug: { status: hubspotRes.status, detail: errorText } },
         { status: 500 }
       )
     }

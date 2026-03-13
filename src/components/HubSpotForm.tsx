@@ -33,7 +33,8 @@ export default function HubSpotForm() {
 
       if (!res.ok) {
         const data = await res.json().catch(() => null)
-        throw new Error(data?.error || '送信に失敗しました。')
+        const debugInfo = data?.debug ? ` [${data.debug.status}: ${data.debug.detail}]` : ''
+        throw new Error((data?.error || '送信に失敗しました。') + debugInfo)
       }
 
       setStatus('success')
