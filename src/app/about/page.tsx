@@ -1,35 +1,28 @@
 import { Metadata } from 'next'
-import Image from 'next/image'
-import PageHeader from '@/components/PageHeader'
+import Link from 'next/link'
 import ScrollReveal from '@/components/ScrollReveal'
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd'
 
 export const metadata: Metadata = {
-  title: '会社情報',
-  description: '株式会社Opinioの会社概要、ミッション・ビジョン・バリューをご紹介します。',
+  title: '会社情報 | OPINIO',
+  description: '株式会社OPINIOの会社概要・代表メッセージ・ミッション・バリューをご紹介します。',
   openGraph: {
-    title: '会社情報 | 株式会社Opinio',
-    description: '株式会社Opinioの会社概要、ミッション・ビジョン・バリューをご紹介します。',
+    title: '会社情報 | OPINIO',
+    description: '株式会社OPINIOの会社概要・代表メッセージ・ミッション・バリューをご紹介します。',
     url: 'https://www.opinio.co.jp/about/',
     images: [{ url: 'https://www.opinio.co.jp/images/ogp.png', width: 1200, height: 630 }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: '会社情報 | 株式会社Opinio',
-    description: '株式会社Opinioの会社概要、ミッション・ビジョン・バリューをご紹介します。',
-    images: ['https://www.opinio.co.jp/images/ogp.png'],
   },
 }
 
 const companyInfo = [
-  { label: '会社名', value: '株式会社Opinio' },
-  { label: '代表者', value: '代表取締役 柴 久人' },
-  { label: '設立', value: '2023年9月' },
-  { label: '資本金', value: '500万円' },
-  { label: '事業内容', value: 'エージェント事業\nHR Tech（HRテック）サービスの開発・販売' },
+  { label: '会社名',             value: '株式会社Opinio' },
+  { label: '代表者',             value: '代表取締役　柴 久人' },
+  { label: '設立',               value: '2023年9月' },
+  { label: '資本金',             value: '500万円' },
+  { label: '事業内容',           value: 'エージェント事業\nHR Tech（HRテック）サービスの開発・販売' },
   { label: '有料職業紹介事業免許', value: '13-ユ-316441' },
-  { label: '保有資格', value: 'キャリアコンサルタント（国家資格）\n一般社団法人プロティアン・キャリア協会 プロティアン基礎検定' },
-  { label: '本社所在地', value: '〒107-0052\n東京都港区赤坂2丁目21番4号' },
+  { label: '保有資格',           value: 'キャリアコンサルタント（国家資格）\n一般社団法人プロティアン・キャリア協会 プロティアン基礎検定' },
+  { label: '本社所在地',         value: '〒107-0052\n東京都港区赤坂2丁目21番4号' },
 ]
 
 const values = [
@@ -58,82 +51,86 @@ export default function AboutPage() {
         { name: '会社情報', url: 'https://www.opinio.co.jp/about/' },
       ]} />
 
-      <PageHeader subtitle="ABOUT US" title="会社情報" />
+      {/* ── PAGE HEADER ── */}
+      <section style={{
+        background: '#fff',
+        borderBottom: '1px solid #000',
+        padding: '80px 0 72px',
+      }}>
+        <div className="container-v3">
+          <p style={{
+            fontFamily: 'var(--font-mono), monospace',
+            fontSize: 11, color: '#999',
+            letterSpacing: '0.22em', textTransform: 'uppercase',
+            marginBottom: 20,
+          }}>ABOUT US</p>
+          <h1 style={{
+            fontFamily: 'var(--font-display), Georgia, serif',
+            fontWeight: 700,
+            fontSize: 'clamp(36px, 5vw, 64px)',
+            lineHeight: 1.05, letterSpacing: '-0.03em',
+            color: '#000',
+          }}>会社情報</h1>
+        </div>
+      </section>
 
-      {/* Vision & Mission */}
-      <section className="section-v3">
+      {/* ── 01 VISION & MISSION ── */}
+      <section style={{ padding: '100px 0', background: '#fff', borderBottom: '1px solid #E0E0E0' }}>
         <div className="container-v3">
           <ScrollReveal>
-            <div className="section-mark">
-              <span className="section-mark-num">01</span>
-              <div className="section-mark-line" />
-            </div>
-            <p className="section-eyebrow">CULTURE</p>
-            <h2 className="section-title-v3">Opinioのカルチャー</h2>
+            <p style={{
+              fontFamily: 'var(--font-mono), monospace',
+              fontSize: 11, color: '#999',
+              letterSpacing: '0.22em', textTransform: 'uppercase',
+              marginBottom: 20,
+            }}>01 — CULTURE</p>
+            <h2 style={{
+              fontFamily: 'var(--font-display), Georgia, serif',
+              fontWeight: 700,
+              fontSize: 'clamp(28px, 3.6vw, 48px)',
+              lineHeight: 1.15, letterSpacing: '-0.025em',
+              color: '#000', marginBottom: 56,
+            }}>OPINIOのカルチャー</h2>
           </ScrollReveal>
 
-          <div className="grid md:grid-cols-2 gap-6" style={{ marginTop: 48, marginBottom: 40 }}>
-            <ScrollReveal delay={100}>
-              <div
-                style={{
-                  background: 'var(--bg-card)',
-                  border: '1px solid var(--border)',
-                  borderTop: '3px solid var(--accent)',
-                  borderRadius: 12,
-                  padding: 40,
-                  height: '100%',
-                }}
-              >
-                <p className="section-eyebrow">VISION</p>
-                <h3
-                  style={{
-                    fontFamily: 'var(--font-display), Georgia, serif',
-                    fontSize: 22,
-                    fontWeight: 500,
-                    color: 'var(--text-primary)',
-                    lineHeight: 1.5,
-                    marginBottom: 16,
-                  }}
-                >
-                  すべての選択肢に、
-                  <br />
-                  納得のいくストーリーを。
+          {/* Vision + Mission cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 0, border: '1px solid #000', marginBottom: 48 }}>
+            <ScrollReveal delay={60}>
+              <div style={{ padding: '48px 44px', borderRight: '1px solid #000', height: '100%' }}>
+                <p style={{
+                  fontFamily: 'var(--font-mono), monospace',
+                  fontSize: 10, color: '#999',
+                  letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 24,
+                }}>VISION</p>
+                <h3 style={{
+                  fontFamily: 'var(--font-display), Georgia, serif',
+                  fontSize: 26, fontWeight: 700,
+                  color: '#000', lineHeight: 1.4, marginBottom: 20,
+                }}>
+                  すべての選択肢に、<br />納得のいくストーリーを。
                 </h3>
-                <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.85 }}>
+                <p style={{ fontSize: 14, color: '#555', lineHeight: 1.9 }}>
                   キャリアの選択に「正解」はありません。しかし、納得できる選択はあります。
                   私たちは、一人ひとりが自分らしいキャリアを描けるよう、
                   透明で信頼できる情報と仕組みを提供します。
                 </p>
               </div>
             </ScrollReveal>
-
-            <ScrollReveal delay={200}>
-              <div
-                style={{
-                  background: 'var(--accent-soft)',
-                  border: '1px solid var(--accent-light)',
-                  borderTop: '3px solid var(--accent)',
-                  borderRadius: 12,
-                  padding: 40,
-                  height: '100%',
-                }}
-              >
-                <p className="section-eyebrow">MISSION</p>
-                <h3
-                  style={{
-                    fontFamily: 'var(--font-display), Georgia, serif',
-                    fontSize: 22,
-                    fontWeight: 500,
-                    color: 'var(--text-primary)',
-                    lineHeight: 1.5,
-                    marginBottom: 16,
-                  }}
-                >
-                  AI時代の
-                  <br />
-                  キャリアインフラになる。
+            <ScrollReveal delay={120}>
+              <div style={{ padding: '48px 44px', background: '#000', height: '100%' }}>
+                <p style={{
+                  fontFamily: 'var(--font-mono), monospace',
+                  fontSize: 10, color: '#555',
+                  letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 24,
+                }}>MISSION</p>
+                <h3 style={{
+                  fontFamily: 'var(--font-display), Georgia, serif',
+                  fontSize: 26, fontWeight: 700,
+                  color: '#fff', lineHeight: 1.4, marginBottom: 20,
+                }}>
+                  AI時代の<br />キャリアインフラになる。
                 </h3>
-                <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.85 }}>
+                <p style={{ fontSize: 14, color: '#888', lineHeight: 1.9 }}>
                   AIが仕事の在り方を根本から変えていく時代。私たちは、人と組織をつなぐ「インフラ」として、
                   信頼性の高い情報基盤とテクノロジーを提供します。
                   変化の時代だからこそ、揺るがない基盤が必要です。
@@ -143,124 +140,104 @@ export default function AboutPage() {
           </div>
 
           {/* Values */}
-          <ScrollReveal delay={300}>
-            <div style={{ background: 'var(--bg-dark)', borderRadius: 12, padding: '48px 40px' }}>
-              <div style={{ textAlign: 'center', marginBottom: 40 }}>
-                <p
-                  style={{
-                    fontFamily: 'var(--font-mono), monospace',
-                    fontSize: 11,
-                    color: 'rgba(255,255,255,0.35)',
-                    letterSpacing: '0.15em',
-                    textTransform: 'uppercase',
-                    marginBottom: 12,
-                  }}
-                >
-                  VALUE
-                </p>
-                <h3
-                  style={{
-                    fontFamily: 'var(--font-display), Georgia, serif',
-                    fontSize: 26,
-                    fontWeight: 500,
-                    color: 'white',
-                    lineHeight: 1.35,
-                  }}
-                >
-                  私たちの価値観
-                </h3>
-              </div>
-              <div className="grid md:grid-cols-3 gap-8">
-                {values.map((v) => (
-                  <div key={v.en}>
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-mono), monospace',
-                        fontSize: 11,
-                        color: 'var(--accent-light)',
-                        letterSpacing: '0.1em',
-                        textTransform: 'uppercase',
-                        marginBottom: 8,
-                      }}
-                    >
-                      {v.en}
-                    </p>
-                    <h4 style={{ fontSize: 15, fontWeight: 600, color: 'white', marginBottom: 10 }}>{v.ja}</h4>
-                    <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', lineHeight: 1.75 }}>{v.desc}</p>
+          <ScrollReveal delay={80}>
+            <p style={{
+              fontFamily: 'var(--font-mono), monospace',
+              fontSize: 11, color: '#999',
+              letterSpacing: '0.22em', textTransform: 'uppercase',
+              marginBottom: 32,
+            }}>VALUE</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 0, border: '1px solid #000' }}>
+              {values.map((v, i) => (
+                <ScrollReveal key={v.en} delay={i * 60}>
+                  <div style={{
+                    padding: '40px 36px',
+                    borderRight: i < values.length - 1 ? '1px solid #000' : 'none',
+                    height: '100%',
+                  }}>
+                    <p style={{
+                      fontFamily: 'var(--font-mono), monospace',
+                      fontSize: 10, color: '#999',
+                      letterSpacing: '0.15em', textTransform: 'uppercase',
+                      marginBottom: 14,
+                    }}>{v.en}</p>
+                    <h4 style={{ fontSize: 16, fontWeight: 700, color: '#000', marginBottom: 12 }}>{v.ja}</h4>
+                    <p style={{ fontSize: 13, color: '#666', lineHeight: 1.8 }}>{v.desc}</p>
                   </div>
-                ))}
-              </div>
+                </ScrollReveal>
+              ))}
             </div>
           </ScrollReveal>
         </div>
       </section>
 
-      {/* CEO Message */}
-      <section style={{ padding: '80px 0', background: 'var(--accent-soft)' }}>
+      {/* ── 02 CEO MESSAGE ── */}
+      <section style={{ padding: '100px 0', background: '#F5F5F5', borderBottom: '1px solid #E0E0E0' }}>
         <div className="container-v3">
           <ScrollReveal>
-            <div className="section-mark">
-              <span className="section-mark-num">02</span>
-              <div className="section-mark-line" />
-            </div>
-            <p className="section-eyebrow">MESSAGE</p>
-            <h2 className="section-title-v3">代表メッセージ</h2>
+            <p style={{
+              fontFamily: 'var(--font-mono), monospace',
+              fontSize: 11, color: '#999',
+              letterSpacing: '0.22em', textTransform: 'uppercase',
+              marginBottom: 20,
+            }}>02 — MESSAGE</p>
+            <h2 style={{
+              fontFamily: 'var(--font-display), Georgia, serif',
+              fontWeight: 700,
+              fontSize: 'clamp(28px, 3.6vw, 48px)',
+              lineHeight: 1.15, letterSpacing: '-0.025em',
+              color: '#000', marginBottom: 64,
+            }}>代表メッセージ</h2>
           </ScrollReveal>
 
-          <div className="grid md:grid-cols-2 gap-16 items-center" style={{ marginTop: 48, maxWidth: 900 }}>
-            <ScrollReveal delay={100}>
-              <div style={{ position: 'relative', aspectRatio: '1', borderRadius: 12, overflow: 'hidden' }}>
-                <Image
-                  src="/images/ceo1.png"
-                  alt="代表取締役 柴 久人"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 450px"
-                  priority
-                />
-              </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 72, alignItems: 'start', maxWidth: 960 }}>
+            <ScrollReveal delay={60}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/ceo1.png"
+                alt="代表取締役 柴 久人"
+                style={{
+                  width: '100%',
+                  aspectRatio: '1',
+                  objectFit: 'cover',
+                  display: 'block',
+                  filter: 'grayscale(20%)',
+                }}
+              />
             </ScrollReveal>
 
-            <ScrollReveal delay={200}>
+            <ScrollReveal delay={120}>
               <div>
-                <h3
-                  style={{
-                    fontFamily: 'var(--font-display), Georgia, serif',
-                    fontSize: 26,
-                    fontWeight: 500,
-                    color: 'var(--text-primary)',
-                    lineHeight: 1.5,
-                    marginBottom: 24,
-                  }}
-                >
-                  すべての人が、
-                  <br />
-                  自分のキャリアに
-                  <br />
-                  納得できる社会へ。
+                <h3 style={{
+                  fontFamily: 'var(--font-display), Georgia, serif',
+                  fontSize: 28, fontWeight: 700,
+                  color: '#000', lineHeight: 1.45, marginBottom: 32,
+                  letterSpacing: '-0.02em',
+                }}>
+                  すべての人が、<br />自分のキャリアに<br />納得できる社会へ。
                 </h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 14, fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.85 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 16, fontSize: 14, color: '#555', lineHeight: 1.9 }}>
                   <p>
                     キャリアの意思決定は、人生において最も重要な選択のひとつです。
                     しかし、情報の非対称性や不透明さにより、多くの人が納得のいかない選択を余儀なくされています。
                   </p>
                   <p>
-                    私たちOpinioは、AI時代のキャリアインフラとして、透明で信頼できる情報基盤を構築し、
+                    私たちOPINIOは、AI時代のキャリアインフラとして、透明で信頼できる情報基盤を構築し、
                     すべての人が自分らしいキャリアを歩める社会を実現します。
                   </p>
-                </div>
-                <div style={{ marginTop: 32, paddingTop: 24, borderTop: '1px solid var(--border)' }}>
-                  <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 4 }}>代表取締役</p>
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-display), Georgia, serif',
-                      fontSize: 20,
-                      fontWeight: 500,
-                      color: 'var(--text-primary)',
-                    }}
-                  >
-                    柴 久人
+                  <p>
+                    Salesforceで6年間、エンタープライズSaaSの現場を経験した中で痛感したのは、
+                    「企業のリアルな情報が、外からはほとんど見えない」という現実です。
+                    だからこそ、私たちは透明性と中立性を軸に、このプラットフォームを作り続けています。
                   </p>
+                </div>
+                <div style={{ marginTop: 40, paddingTop: 28, borderTop: '1px solid #D0D0D0' }}>
+                  <p style={{ fontFamily: 'var(--font-mono), monospace', fontSize: 10, color: '#999', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>代表取締役</p>
+                  <p style={{
+                    fontFamily: 'var(--font-display), Georgia, serif',
+                    fontSize: 22, fontWeight: 700,
+                    color: '#000', letterSpacing: '-0.01em',
+                  }}>柴 久人</p>
                 </div>
               </div>
             </ScrollReveal>
@@ -268,61 +245,72 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Company Overview */}
-      <section className="section-v3">
+      {/* ── 03 COMPANY OVERVIEW ── */}
+      <section style={{ padding: '100px 0', background: '#fff' }}>
         <div className="container-v3">
           <ScrollReveal>
-            <div className="section-mark">
-              <span className="section-mark-num">03</span>
-              <div className="section-mark-line" />
-            </div>
-            <p className="section-eyebrow">COMPANY</p>
-            <h2 className="section-title-v3">会社概要</h2>
+            <p style={{
+              fontFamily: 'var(--font-mono), monospace',
+              fontSize: 11, color: '#999',
+              letterSpacing: '0.22em', textTransform: 'uppercase',
+              marginBottom: 20,
+            }}>03 — COMPANY</p>
+            <h2 style={{
+              fontFamily: 'var(--font-display), Georgia, serif',
+              fontWeight: 700,
+              fontSize: 'clamp(28px, 3.6vw, 48px)',
+              lineHeight: 1.15, letterSpacing: '-0.025em',
+              color: '#000', marginBottom: 56,
+            }}>会社概要</h2>
           </ScrollReveal>
 
-          <ScrollReveal delay={100}>
-            <dl
-              style={{
-                background: 'var(--bg-card)',
-                border: '1px solid var(--border)',
-                borderRadius: 12,
-                overflow: 'hidden',
-                maxWidth: 720,
-                marginTop: 48,
-              }}
-            >
+          <ScrollReveal delay={60}>
+            <dl style={{ maxWidth: 800, border: '1px solid #000' }}>
               {companyInfo.map((item, i) => (
-                <div
-                  key={item.label}
-                  className="grid sm:grid-cols-3"
-                  style={{ borderBottom: i < companyInfo.length - 1 ? '1px solid var(--border)' : 'none' }}
-                >
-                  <dt
-                    style={{
-                      padding: '16px 24px',
-                      fontSize: 13,
-                      fontWeight: 500,
-                      color: 'var(--text-muted)',
-                      background: 'var(--accent-soft)',
-                    }}
-                  >
+                <div key={item.label} style={{
+                  display: 'grid',
+                  gridTemplateColumns: '200px 1fr',
+                  borderBottom: i < companyInfo.length - 1 ? '1px solid #D0D0D0' : 'none',
+                }}>
+                  <dt style={{
+                    padding: '18px 24px',
+                    fontSize: 13, fontWeight: 500,
+                    color: '#999',
+                    background: '#F5F5F5',
+                    borderRight: '1px solid #D0D0D0',
+                    fontFamily: 'var(--font-mono), monospace',
+                    letterSpacing: '0.02em',
+                    display: 'flex', alignItems: 'center',
+                  }}>
                     {item.label}
                   </dt>
-                  <dd
-                    className="sm:col-span-2"
-                    style={{
-                      padding: '16px 24px',
-                      fontSize: 14,
-                      color: 'var(--text-primary)',
-                      whiteSpace: 'pre-line',
-                      lineHeight: 1.75,
-                    }}
-                  >
+                  <dd style={{
+                    padding: '18px 28px',
+                    fontSize: 14, color: '#000',
+                    whiteSpace: 'pre-line', lineHeight: 1.8,
+                    display: 'flex', alignItems: 'center',
+                    margin: 0,
+                  }}>
                     {item.value}
                   </dd>
                 </div>
               ))}
             </dl>
+          </ScrollReveal>
+
+          {/* CTA */}
+          <ScrollReveal delay={80}>
+            <div style={{ marginTop: 72, paddingTop: 64, borderTop: '1px solid #E0E0E0', display: 'flex', gap: 24, flexWrap: 'wrap', alignItems: 'center' }}>
+              <Link href="/contact/?type=candidate" className="btn-v3 btn-v3-black">
+                候補者相談を申し込む
+              </Link>
+              <Link href="/contact/?type=business" style={{
+                fontSize: 14, fontWeight: 500, color: '#000',
+                textDecoration: 'none', borderBottom: '1px solid #000', paddingBottom: 2,
+              }}>
+                企業の採用相談はこちら →
+              </Link>
+            </div>
           </ScrollReveal>
         </div>
       </section>
