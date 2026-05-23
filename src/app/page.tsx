@@ -162,19 +162,19 @@ export default async function Home() {
                 borderRadius: 10,
                 border: '1px solid #E8E8E8',
                 boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
-                height: 88,
+                height: 104,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: '0 20px',
+                padding: '0 22px',
               }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={`/images/logos/${logo.file}`}
                   alt={logo.name}
                   style={{
-                    maxHeight: 44,
-                    maxWidth: 120,
+                    maxHeight: 58,
+                    maxWidth: 130,
                     objectFit: 'contain',
                     display: 'block',
                   }}
