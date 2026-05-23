@@ -163,19 +163,19 @@ export default async function Home() {
             ].map((logo) => (
               <div key={logo.name + logo.file} style={{
                 background: '#fff',
-                aspectRatio: '2/1',
+                aspectRatio: '5/3',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: '12px 16px',
+                padding: '16px 20px',
               }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={`/images/logos/${logo.file}`}
                   alt={logo.name}
                   style={{
-                    maxHeight: '52%',
-                    maxWidth: '75%',
+                    maxHeight: '72%',
+                    maxWidth: '84%',
                     objectFit: 'contain',
                     display: 'block',
                   }}
@@ -185,11 +185,6 @@ export default async function Home() {
           </div>
         </div>
       </section>
-
-      {/* ═══════════════════════════════════════════
-          KPI STATS — dark (already dark component)
-      ═══════════════════════════════════════════ */}
-      <KpiStats />
 
       {/* ═══════════════════════════════════════════
           ABOUT — what OPINIO is
@@ -443,41 +438,84 @@ export default async function Home() {
       {/* ═══════════════════════════════════════════
           CHALLENGE FLOW — 課題 → OPINIO → 解決
       ═══════════════════════════════════════════ */}
-      <section style={{
-        padding: '100px 0',
-        background: '#fff',
-        borderTop: '1px solid #E0E0E0',
-      }}>
+      <section style={{ background: '#000', padding: '100px 0' }}>
         <div className="container-v3">
           <ScrollReveal>
             <p style={{
               fontFamily: 'var(--font-mono), monospace',
-              fontSize: 11, color: '#999',
+              fontSize: 11, color: '#555',
               letterSpacing: '0.22em', textTransform: 'uppercase',
-              marginBottom: 20,
+              marginBottom: 20, textAlign: 'center',
             }}>PROBLEM → SOLUTION</p>
             <h2 style={{
               fontFamily: 'var(--font-display), Georgia, serif',
               fontWeight: 700,
               fontSize: 'clamp(28px, 3.6vw, 48px)',
               lineHeight: 1.15, letterSpacing: '-0.025em',
-              color: '#000', marginBottom: 56,
+              color: '#fff', marginBottom: 64, textAlign: 'center',
             }}>OPINIOが解決すること</h2>
           </ScrollReveal>
 
+          {/* 3カラム: 課題 | OPINIO | 解決 */}
           <ScrollReveal delay={80}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/challenge-flow.png"
-              alt="課題から解決へ：企業のリアルが見えない・誰に相談すべきかわからない・企業側も魅力を届けられない → OPINIOが → 企業情報を透明に開示・国家資格キャリアコンサルタントが伴走・ミスマッチのない採用を実現"
-              style={{
-                width: '100%',
-                maxWidth: 1100,
-                display: 'block',
-                margin: '0 auto',
-                border: '1px solid #E0E0E0',
-              }}
-            />
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 200px 1fr',
+              border: '1px solid #222',
+            }}>
+              {/* 左：課題 */}
+              <div style={{ padding: '52px 44px', borderRight: '1px solid #222' }}>
+                <p style={{ fontFamily: 'var(--font-mono), monospace', fontSize: 10, color: '#444', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 20 }}>BEFORE</p>
+                <h3 style={{ fontFamily: 'var(--font-display), Georgia, serif', fontSize: 36, fontWeight: 700, color: '#fff', marginBottom: 48, lineHeight: 1 }}>課題</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+                  {[
+                    { n: '01', title: '企業のリアルが見えない', text: '求人票だけでは文化・働き方の実態を把握できず、入社後にギャップが生まれる' },
+                    { n: '02', title: '誰に相談すべきかわからない', text: 'エージェントは成約を優先しがちで、中立な立場でキャリアを見てくれる人がいない' },
+                    { n: '03', title: '企業側も魅力を届けられない', text: '自社のカルチャーや実態を求職者に正しく伝える手段が限られている' },
+                  ].map(item => (
+                    <div key={item.n} style={{ display: 'flex', gap: 16 }}>
+                      <span style={{ fontFamily: 'var(--font-mono), monospace', fontSize: 11, color: '#444', paddingTop: 2, flexShrink: 0 }}>{item.n}</span>
+                      <div>
+                        <p style={{ fontSize: 14, fontWeight: 600, color: '#fff', marginBottom: 6 }}>{item.title}</p>
+                        <p style={{ fontSize: 13, color: '#666', lineHeight: 1.75 }}>{item.text}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 中央：OPINIO */}
+              <div style={{
+                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                padding: '40px 20px', textAlign: 'center', borderRight: '1px solid #222', position: 'relative',
+              }}>
+                <p style={{ fontFamily: 'var(--font-display), Georgia, serif', fontSize: 22, fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', marginBottom: 16 }}>OPINIO.</p>
+                <div style={{ width: 28, height: 1, background: '#444', marginBottom: 16 }} />
+                <p style={{ fontFamily: 'var(--font-mono), monospace', fontSize: 11, color: '#666', lineHeight: 1.8, letterSpacing: '0.04em' }}>第三者の声と<br />テクノロジーで<br />つなぐ</p>
+                <div style={{ marginTop: 20, fontSize: 10, border: '1px solid #333', padding: '4px 10px', letterSpacing: '0.1em', fontFamily: 'var(--font-mono), monospace', color: '#555' }}>HR TECH</div>
+              </div>
+
+              {/* 右：解決 */}
+              <div style={{ padding: '52px 44px' }}>
+                <p style={{ fontFamily: 'var(--font-mono), monospace', fontSize: 10, color: '#444', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 20 }}>AFTER</p>
+                <h3 style={{ fontFamily: 'var(--font-display), Georgia, serif', fontSize: 36, fontWeight: 700, color: '#fff', marginBottom: 48, lineHeight: 1 }}>解決</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+                  {[
+                    { n: '01', title: '企業情報を透明に開示', text: '120社以上の企業ページでカルチャー・働き方・求人を一か所で確認。カジュアル面談も申込可能' },
+                    { n: '02', title: '国家資格キャリアコンサルタントが伴走', text: '転職を急かさず、中長期の視点で意思決定をサポートする中立な第3者' },
+                    { n: '03', title: 'ミスマッチのない採用を実現', text: '情報の透明性とキャリア支援の組み合わせで、早期離職率0%を達成' },
+                  ].map(item => (
+                    <div key={item.n} style={{ display: 'flex', gap: 16 }}>
+                      <span style={{ fontFamily: 'var(--font-mono), monospace', fontSize: 11, color: '#444', paddingTop: 2, flexShrink: 0 }}>{item.n}</span>
+                      <div>
+                        <p style={{ fontSize: 14, fontWeight: 600, color: '#fff', marginBottom: 6 }}>{item.title}</p>
+                        <p style={{ fontSize: 13, color: '#666', lineHeight: 1.75 }}>{item.text}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </ScrollReveal>
         </div>
       </section>
