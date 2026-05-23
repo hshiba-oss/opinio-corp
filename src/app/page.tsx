@@ -173,8 +173,9 @@ export default async function Home() {
                   src={`/images/logos/${logo.file}`}
                   alt={logo.name}
                   style={{
-                    maxHeight: 58,
-                    maxWidth: 130,
+                    height: 36,
+                    width: 'auto',
+                    maxWidth: 120,
                     objectFit: 'contain',
                     display: 'block',
                   }}
