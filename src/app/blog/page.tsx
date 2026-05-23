@@ -1,86 +1,127 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
-import { Calendar, Tag } from 'lucide-react'
+import { Calendar } from 'lucide-react'
 import PageHeader from '@/components/PageHeader'
+import ScrollReveal from '@/components/ScrollReveal'
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd'
 
 export const metadata: Metadata = {
-  title: 'ブログ',
-  description: '株式会社Opinioのブログ。キャリア・HR Tech・採用に関するナレッジやコラムをお届けします。',
+  title: 'キャリアコラム',
+  description: 'IT/SaaS業界のキャリア・採用に関するナレッジやコラムをお届けします。',
+  openGraph: {
+    title: 'キャリアコラム | 株式会社Opinio',
+    description: 'IT/SaaS業界のキャリア・採用に関するナレッジやコラムをお届けします。',
+    url: 'https://www.opinio.co.jp/blog/',
+    images: [{ url: 'https://www.opinio.co.jp/images/ogp.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'キャリアコラム | 株式会社Opinio',
+    description: 'IT/SaaS業界のキャリア・採用に関するナレッジやコラムをお届けします。',
+    images: ['https://www.opinio.co.jp/images/ogp.png'],
+  },
 }
 
 export const revalidate = 60
 
 function formatDate(date: Date) {
-  return date.toLocaleDateString('ja-JP', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  }).replace(/\//g, '.')
+  return date.toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '.')
 }
 
-const categoryColor: Record<string, string> = {
-  'コラム': 'bg-primary-100 text-primary-800',
-  'ナレッジ': 'bg-accent-100 text-accent-700',
-  'インタビュー': 'bg-teal-100 text-teal-700',
-  'お役立ち': 'bg-gray-100 text-gray-700',
+const categoryStyle = (cat: string): { bg: string; color: string } => {
+  if (cat === 'コラム') return { bg: 'var(--accent-soft)', color: 'var(--accent)' }
+  if (cat === 'ナレッジ') return { bg: 'rgba(5,150,105,0.1)', color: '#059669' }
+  if (cat === 'インタビュー') return { bg: 'rgba(124,58,237,0.1)', color: '#7C3AED' }
+  return { bg: 'var(--border)', color: 'var(--text-muted)' }
 }
 
 export default async function BlogPage() {
-  const posts = await prisma.blogPost.findMany({
-    where: { published: true },
-    orderBy: { date: 'desc' },
-  })
+  type PostRow = { id: string; slug: string; title: string; date: Date; category: string; excerpt: string; tags: string[] }
+  let posts: PostRow[] = []
+  try {
+    posts = await prisma.blogPost.findMany({
+      where: { published: true },
+      orderBy: { date: 'desc' },
+    }) as PostRow[]
+  } catch {
+    // DB unavailable in local dev
+  }
 
   return (
     <>
-      <PageHeader subtitle="BLOG" title="ブログ" description="キャリア・HR Tech・採用に関するナレッジやコラムをお届けします" />
+      <BreadcrumbJsonLd items={[
+        { name: 'ホーム', url: 'https://www.opinio.co.jp' },
+        { name: 'キャリアコラム', url: 'https://www.opinio.co.jp/blog/' },
+      ]} />
 
-      {/* Blog List */}
-      <section className="section-padding">
-        <div className="section-container">
+      <PageHeader subtitle="COLUMN" title="キャリアコラム" description="IT/SaaS業界のキャリア・採用に関するナレッジをお届けします" />
+
+      <section className="section-v3">
+        <div className="container-v3">
           {posts.length > 0 ? (
-            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-              {posts.map((post) => (
-                <Link
-                  key={post.id}
-                  href={`/blog/${post.slug}/`}
-                  className="block bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-primary-300 hover:shadow-lg transition-all group"
-                >
-                  <div className="p-6">
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="flex items-center gap-1 text-sm text-gray-500">
-                        <Calendar className="w-4 h-4" />
+            <div className="grid md:grid-cols-2 gap-6" style={{ maxWidth: 900 }}>
+              {posts.map((post, i) => (
+                <ScrollReveal key={post.id} delay={i * 60}>
+                  <Link
+                    href={`/blog/${post.slug}/`}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      background: 'var(--bg-card)',
+                      border: '1px solid var(--border)',
+                      borderRadius: 12,
+                      padding: 28,
+                      textDecoration: 'none',
+                      height: '100%',
+                      transition: 'border-color 0.2s, box-shadow 0.2s',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--text-muted)', fontFamily: 'var(--font-mono), monospace', letterSpacing: '0.04em' }}>
+                        <Calendar style={{ width: 11, height: 11 }} />
                         {formatDate(post.date)}
                       </span>
-                      <span className={`text-xs font-medium px-2 py-0.5 rounded ${categoryColor[post.category] || 'bg-gray-100 text-gray-700'}`}>
+                      <span style={{
+                        fontSize: 10,
+                        fontWeight: 500,
+                        padding: '3px 10px',
+                        borderRadius: 20,
+                        background: categoryStyle(post.category).bg,
+                        color: categoryStyle(post.category).color,
+                        fontFamily: 'var(--font-mono), monospace',
+                        letterSpacing: '0.03em',
+                      }}>
                         {post.category}
                       </span>
                     </div>
-                    <h2 className="text-lg font-bold text-primary-800 group-hover:text-accent-500 transition-colors mb-2">
+                    <h2 style={{ fontFamily: 'var(--font-display), Georgia, serif', fontWeight: 500, fontSize: 17, lineHeight: 1.5, color: 'var(--text-primary)', marginBottom: 10, letterSpacing: '-0.01em', flex: 1 }}>
                       {post.title}
                     </h2>
-                    <p className="text-sm text-gray-600 line-clamp-2 mb-4">
-                      {post.excerpt}
-                    </p>
+                    {post.excerpt && (
+                      <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.75, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', marginBottom: post.tags.length > 0 ? 14 : 0 }}>
+                        {post.excerpt}
+                      </p>
+                    )}
                     {post.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-2">
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--border)' }}>
                         {post.tags.map((tag) => (
-                          <span key={tag} className="inline-flex items-center gap-1 text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded">
-                            <Tag className="w-3 h-3" />
-                            {tag}
+                          <span key={tag} style={{ fontSize: 11, color: 'var(--text-muted)', background: 'var(--accent-soft)', padding: '2px 8px', borderRadius: 4, fontFamily: 'var(--font-mono), monospace' }}>
+                            #{tag}
                           </span>
                         ))}
                       </div>
                     )}
-                  </div>
-                </Link>
+                  </Link>
+                </ScrollReveal>
               ))}
             </div>
           ) : (
-            <div className="text-center py-12">
-              <p className="text-gray-600">記事はまだありません。</p>
-            </div>
+            <ScrollReveal>
+              <div style={{ textAlign: 'center', padding: '80px 0' }}>
+                <p style={{ fontSize: 15, color: 'var(--text-secondary)' }}>現在、記事はありません。</p>
+              </div>
+            </ScrollReveal>
           )}
         </div>
       </section>

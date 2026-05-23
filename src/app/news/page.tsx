@@ -1,76 +1,114 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
-import { Calendar, ArrowRight } from 'lucide-react'
+import { Calendar } from 'lucide-react'
 import PageHeader from '@/components/PageHeader'
+import ScrollReveal from '@/components/ScrollReveal'
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd'
 
 export const metadata: Metadata = {
   title: 'お知らせ',
   description: '株式会社Opinioからのお知らせ、プレスリリースをご覧いただけます。',
+  openGraph: {
+    title: 'お知らせ | 株式会社Opinio',
+    description: '株式会社Opinioからの最新情報、プレスリリースをご覧いただけます。',
+    url: 'https://www.opinio.co.jp/news/',
+    images: [{ url: 'https://www.opinio.co.jp/images/ogp.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'お知らせ | 株式会社Opinio',
+    description: '株式会社Opinioからの最新情報をご覧いただけます。',
+    images: ['https://www.opinio.co.jp/images/ogp.png'],
+  },
 }
 
 export const revalidate = 60
 
 function formatDate(date: Date) {
-  return date.toLocaleDateString('ja-JP', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  }).replace(/\//g, '.')
+  return date.toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '.')
+}
+
+const categoryStyle = (category: string): { bg: string; color: string } => {
+  if (category === 'プレスリリース') return { bg: 'var(--accent-soft)', color: 'var(--accent)' }
+  if (category === '採用') return { bg: 'rgba(5,150,105,0.1)', color: '#059669' }
+  return { bg: 'var(--border)', color: 'var(--text-muted)' }
 }
 
 export default async function NewsPage() {
-  const posts = await prisma.newsPost.findMany({
-    where: { published: true },
-    orderBy: { date: 'desc' },
-  })
+  type PostRow = { id: string; slug: string; title: string; date: Date; category: string }
+  let posts: PostRow[] = []
+  try {
+    posts = await prisma.newsPost.findMany({
+      where: { published: true },
+      orderBy: { date: 'desc' },
+    }) as PostRow[]
+  } catch {
+    // DB unavailable in local dev
+  }
 
   return (
     <>
+      <BreadcrumbJsonLd items={[
+        { name: 'ホーム', url: 'https://www.opinio.co.jp' },
+        { name: 'お知らせ', url: 'https://www.opinio.co.jp/news/' },
+      ]} />
+
       <PageHeader subtitle="NEWS" title="お知らせ" />
 
-      {/* News List */}
-      <section className="section-padding">
-        <div className="section-container">
-          <div className="max-w-3xl mx-auto">
+      <section className="section-v3">
+        <div className="container-v3">
+          <div style={{ maxWidth: 800 }}>
             {posts.length > 0 ? (
-              <div className="divide-y divide-gray-200">
-                {posts.map((post) => (
-                  <Link
-                    key={post.id}
-                    href={`/news/${post.slug}/`}
-                    className="block py-6 group hover:bg-gray-50 -mx-4 px-4 rounded-lg transition-colors"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <span className="flex items-center gap-1 text-sm text-gray-500">
-                            <Calendar className="w-4 h-4" />
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {posts.map((post, i) => (
+                  <ScrollReveal key={post.id} delay={i * 40}>
+                    <Link
+                      href={`/news/${post.slug}/`}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        justifyContent: 'space-between',
+                        gap: 16,
+                        padding: '24px 0',
+                        borderBottom: '1px solid var(--border)',
+                        textDecoration: 'none',
+                      }}
+                    >
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, color: 'var(--text-muted)', fontFamily: 'var(--font-mono), monospace' }}>
+                            <Calendar style={{ width: 12, height: 12 }} />
                             {formatDate(post.date)}
                           </span>
-                          <span className={`text-xs font-medium px-2 py-0.5 rounded ${
-                            post.category === 'プレスリリース'
-                              ? 'bg-accent-100 text-accent-700'
-                              : post.category === '採用'
-                              ? 'bg-green-100 text-green-700'
-                              : 'bg-gray-100 text-gray-700'
-                          }`}>
+                          <span style={{
+                            fontSize: 11,
+                            fontWeight: 500,
+                            padding: '3px 10px',
+                            borderRadius: 20,
+                            background: categoryStyle(post.category).bg,
+                            color: categoryStyle(post.category).color,
+                            fontFamily: 'var(--font-mono), monospace',
+                            letterSpacing: '0.03em',
+                          }}>
                             {post.category}
                           </span>
                         </div>
-                        <h2 className="text-lg font-medium text-primary-800 group-hover:text-accent-500 transition-colors">
+                        <h2 style={{ fontSize: 15, fontWeight: 500, color: 'var(--text-primary)', lineHeight: 1.6, transition: 'color 0.2s' }}>
                           {post.title}
                         </h2>
                       </div>
-                      <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-accent-500 transition-colors flex-shrink-0 mt-1" />
-                    </div>
-                  </Link>
+                      <span style={{ fontFamily: 'var(--font-mono), monospace', fontSize: 16, color: 'var(--accent)', flexShrink: 0, marginTop: 4 }}>→</span>
+                    </Link>
+                  </ScrollReveal>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12">
-                <p className="text-gray-600">お知らせはありません。</p>
-              </div>
+              <ScrollReveal>
+                <div style={{ textAlign: 'center', padding: '80px 0' }}>
+                  <p style={{ fontSize: 15, color: 'var(--text-secondary)' }}>現在、お知らせはありません。</p>
+                </div>
+              </ScrollReveal>
             )}
           </div>
         </div>

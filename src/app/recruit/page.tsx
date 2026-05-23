@@ -1,124 +1,185 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
-import { MapPin, Clock, Building2, ArrowRight, Users, Lightbulb, Target } from 'lucide-react'
+import { MapPin, Clock, Building2, Users } from 'lucide-react'
 import PageHeader from '@/components/PageHeader'
+import ScrollReveal from '@/components/ScrollReveal'
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd'
 
 export const metadata: Metadata = {
   title: '採用情報',
   description: '株式会社Opinioの採用情報です。一緒にAI時代のキャリアインフラを創りませんか。',
+  openGraph: {
+    title: '採用情報 | 株式会社Opinio',
+    description: 'AI時代のキャリアインフラを一緒に創りませんか。スタートアップならではのスピード感と確かな専門性を持つチームで挑戦できます。',
+    url: 'https://www.opinio.co.jp/recruit/',
+    images: [{ url: 'https://www.opinio.co.jp/images/ogp.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '採用情報 | 株式会社Opinio',
+    description: 'AI時代のキャリアインフラを一緒に創りませんか。',
+    images: ['https://www.opinio.co.jp/images/ogp.png'],
+  },
 }
 
 export const revalidate = 60
 
+const cultureValues = [
+  { en: 'The Dream Team', ja: '最高のチームを作る', desc: '少数精鋭のチームで、互いを高め合いながら成長できる環境' },
+  { en: 'Truth First', ja: '真実を最優先に', desc: 'オープンなコミュニケーションと、率直なフィードバック文化' },
+  { en: 'Think Big', ja: '大きく考える', desc: '大きな目標に向かって、裁量を持ってチャレンジできる環境' },
+]
+
 export default async function RecruitPage() {
-  const publishedJobs = await prisma.job.findMany({
-    where: { published: true },
-    orderBy: { createdAt: 'desc' },
-  })
+  type JobRow = { id: string; slug: string; title: string; department: string; type: string; location: string }
+  let publishedJobs: JobRow[] = []
+  try {
+    publishedJobs = await prisma.job.findMany({
+      where: { published: true },
+      orderBy: { createdAt: 'desc' },
+    }) as JobRow[]
+  } catch {
+    // DB unavailable in local dev
+  }
 
   return (
     <>
+      <BreadcrumbJsonLd items={[
+        { name: 'ホーム', url: 'https://www.opinio.co.jp' },
+        { name: '採用情報', url: 'https://www.opinio.co.jp/recruit/' },
+      ]} />
+
       <PageHeader subtitle="RECRUIT" title="採用情報" description="一緒にAI時代のキャリアインフラを創りませんか" />
 
-      {/* Culture */}
-      <section className="section-padding">
-        <div className="section-container">
-          <div className="max-w-3xl mx-auto text-center mb-12">
-            <h2 className="heading-2 text-primary-800 mb-6">Opinioで働く</h2>
-            <p className="text-gray-600 leading-relaxed">
-              私たちは「AI時代のキャリアインフラになる」というミッションのもと、
-              HR領域の課題解決に取り組んでいます。
-              スタートアップならではのスピード感と、確かな専門性を持つチームで、
-              大きなインパクトを生み出す仕事に挑戦できます。
+      {/* Culture & Values */}
+      <section className="section-v3">
+        <div className="container-v3">
+          <ScrollReveal>
+            <div className="section-mark">
+              <span className="section-mark-num">01</span>
+              <div className="section-mark-line" />
+            </div>
+            <p className="section-eyebrow">CULTURE</p>
+            <h2 className="section-title-v3">Opinioで働く</h2>
+            <p className="section-subtitle-v3" style={{ marginTop: 12 }}>
+              私たちは「AI時代のキャリアインフラになる」というミッションのもと、HR領域の課題解決に取り組んでいます。
+              スタートアップならではのスピード感と、確かな専門性を持つチームで、大きなインパクトを生み出す仕事に挑戦できます。
             </p>
-          </div>
+          </ScrollReveal>
 
-          {/* Values */}
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-gray-50 rounded-2xl p-6 text-center">
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-primary-100 text-primary-800 mb-4">
-                <Users className="w-7 h-7" />
+          <ScrollReveal delay={150}>
+            <div style={{ background: 'var(--bg-dark)', borderRadius: 12, padding: '48px 40px', marginTop: 48 }}>
+              <div className="grid md:grid-cols-3 gap-8">
+                {cultureValues.map((v) => (
+                  <div key={v.en}>
+                    <p style={{ fontFamily: 'var(--font-mono), monospace', fontSize: 11, color: 'var(--accent-light)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>
+                      {v.en}
+                    </p>
+                    <h3 style={{ fontSize: 15, fontWeight: 600, color: 'white', marginBottom: 10 }}>{v.ja}</h3>
+                    <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', lineHeight: 1.75 }}>{v.desc}</p>
+                  </div>
+                ))}
               </div>
-              <h3 className="font-bold text-primary-800 mb-2">The Dream Team</h3>
-              <p className="text-sm text-gray-600">少数精鋭のチームで、互いを高め合いながら成長できる環境</p>
             </div>
-            <div className="bg-gray-50 rounded-2xl p-6 text-center">
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-accent-100 text-accent-600 mb-4">
-                <Lightbulb className="w-7 h-7" />
-              </div>
-              <h3 className="font-bold text-primary-800 mb-2">Truth First</h3>
-              <p className="text-sm text-gray-600">オープンなコミュニケーションと、率直なフィードバック文化</p>
-            </div>
-            <div className="bg-gray-50 rounded-2xl p-6 text-center">
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-primary-100 text-primary-800 mb-4">
-                <Target className="w-7 h-7" />
-              </div>
-              <h3 className="font-bold text-primary-800 mb-2">Think Big</h3>
-              <p className="text-sm text-gray-600">大きな目標に向かって、裁量を持ってチャレンジできる環境</p>
-            </div>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
-      {/* Job Listings */}
-      <section className="section-padding bg-gray-50">
-        <div className="section-container">
-          <div className="text-center mb-12">
-            <p className="text-accent-500 font-medium mb-2">OPEN POSITIONS</p>
-            <h2 className="heading-2 text-primary-800">募集中の職種</h2>
-          </div>
+      {/* Open Positions */}
+      <section style={{ padding: '80px 0', background: 'var(--accent-soft)' }}>
+        <div className="container-v3">
+          <ScrollReveal>
+            <div className="section-mark">
+              <span className="section-mark-num">02</span>
+              <div className="section-mark-line" />
+            </div>
+            <p className="section-eyebrow">OPEN POSITIONS</p>
+            <h2 className="section-title-v3">募集中の職種</h2>
+          </ScrollReveal>
 
-          {publishedJobs.length > 0 ? (
-            <div className="space-y-4 max-w-3xl mx-auto">
-              {publishedJobs.map((job) => (
-                <Link
-                  key={job.id}
-                  href={`/recruit/${job.slug}/`}
-                  className="block bg-white rounded-xl p-6 border border-gray-200 hover:border-primary-300 hover:shadow-lg transition-all group"
-                >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="text-lg font-bold text-primary-800 group-hover:text-accent-500 transition-colors mb-2">
-                        {job.title}
-                      </h3>
-                      <div className="flex flex-wrap gap-4 text-sm text-gray-500">
-                        <span className="flex items-center gap-1"><Building2 className="w-4 h-4" />{job.department}</span>
-                        <span className="flex items-center gap-1"><Clock className="w-4 h-4" />{job.type}</span>
-                        <span className="flex items-center gap-1"><MapPin className="w-4 h-4" />{job.location}</span>
+          <div style={{ marginTop: 48, maxWidth: 800 }}>
+            {publishedJobs.length > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                {publishedJobs.map((job, i) => (
+                  <ScrollReveal key={job.id} delay={i * 60}>
+                    <Link
+                      href={`/recruit/${job.slug}/`}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: 16,
+                        padding: '24px 32px',
+                        background: 'var(--bg-card)',
+                        border: '1px solid var(--border)',
+                        borderRadius: 10,
+                        textDecoration: 'none',
+                        transition: 'border-color 0.2s, box-shadow 0.2s',
+                      }}
+                    >
+                      <div>
+                        <h3 style={{ fontSize: 16, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 8 }}>
+                          {job.title}
+                        </h3>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, fontSize: 13, color: 'var(--text-muted)' }}>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                            <Building2 style={{ width: 14, height: 14 }} />{job.department}
+                          </span>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                            <Clock style={{ width: 14, height: 14 }} />{job.type}
+                          </span>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                            <MapPin style={{ width: 14, height: 14 }} />{job.location}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-accent-500 transition-colors flex-shrink-0" />
-                  </div>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-200 text-gray-400 mb-4">
-                <Users className="w-8 h-8" />
+                      <span style={{ fontFamily: 'var(--font-mono), monospace', fontSize: 18, color: 'var(--accent)', flexShrink: 0 }}>→</span>
+                    </Link>
+                  </ScrollReveal>
+                ))}
               </div>
-              <p className="text-gray-600 mb-6">現在、募集中の求人はありません。</p>
-              <p className="text-sm text-gray-500">カジュアル面談は随時受け付けています。<br />ご興味のある方はお問い合わせください。</p>
-            </div>
-          )}
+            ) : (
+              <ScrollReveal delay={100}>
+                <div style={{
+                  background: 'var(--bg-card)',
+                  border: '1px solid var(--border)',
+                  borderRadius: 12,
+                  padding: '64px 40px',
+                  textAlign: 'center',
+                }}>
+                  <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+                    <Users style={{ width: 24, height: 24, color: 'var(--accent)' }} />
+                  </div>
+                  <p style={{ fontSize: 15, fontWeight: 500, color: 'var(--text-primary)', marginBottom: 8 }}>現在、募集中の求人はありません</p>
+                  <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.75 }}>
+                    カジュアル面談は随時受け付けています。<br />ご興味のある方はお問い合わせください。
+                  </p>
+                </div>
+              </ScrollReveal>
+            )}
+          </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="section-padding">
-        <div className="section-container">
-          <div className="bg-gradient-to-r from-primary-800 to-primary-700 rounded-2xl p-8 md:p-12 text-white text-center">
-            <h2 className="heading-2 mb-4">カジュアル面談受付中</h2>
-            <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
-              募集職種に関わらず、Opinioに興味をお持ちの方との面談を随時受け付けています。
-              まずはお気軽にお問い合わせください。
+      <section style={{ padding: '80px 0', background: 'var(--bg-dark)' }}>
+        <div className="container-v3" style={{ textAlign: 'center' }}>
+          <ScrollReveal>
+            <p style={{ fontFamily: 'var(--font-mono), monospace', fontSize: 11, color: 'var(--accent-light)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 16 }}>
+              CASUAL MEETING
             </p>
-            <Link href="/contact/" className="btn-primary">
-              お問い合わせ
-              <ArrowRight className="ml-2 w-4 h-4" />
+            <h2 style={{ fontFamily: 'var(--font-display), Georgia, serif', fontSize: 'clamp(26px, 4vw, 40px)', fontWeight: 500, color: 'white', lineHeight: 1.35, marginBottom: 16 }}>
+              カジュアル面談受付中
+            </h2>
+            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', marginBottom: 40, lineHeight: 1.7 }}>
+              募集職種に関わらず、Opinioに興味をお持ちの方との面談を随時受け付けています。<br />
+              まずはお気軽にご連絡ください。
+            </p>
+            <Link href="/contact/" className="btn-v3 btn-v3-large btn-v3-on-green-primary">
+              お問い合わせ →
             </Link>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
     </>

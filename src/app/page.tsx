@@ -1,256 +1,697 @@
 import Link from 'next/link'
-import Image from 'next/image'
-import { ArrowRight, Lightbulb, Target, Briefcase, Code } from 'lucide-react'
-import DiamondCarousel from '@/components/DiamondCarousel'
+import { prisma } from '@/lib/prisma'
+import ScrollReveal from '@/components/ScrollReveal'
+import KpiStats from '@/components/KpiStats'
+import LogoMarquee from '@/components/LogoMarquee'
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd'
 
-export default function Home() {
+export default async function Home() {
+  let consultingLogos: { id: string; name: string; imageUrl: string }[] = []
+  try {
+    consultingLogos = await prisma.logo.findMany({
+      where: { published: true, category: 'consulting' },
+      orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
+    })
+  } catch {
+    // DB unavailable — render without logos
+  }
+
   return (
     <>
-      {/* Preload LCP hero background */}
-      <link
-        rel="preload"
-        as="image"
-        href="/images/opiniocorpherobackground.webp"
-        type="image/webp"
-        media="(min-width: 768px)"
-      />
-      <link
-        rel="preload"
-        as="image"
-        href="/images/hero-mobile-bg.webp"
-        type="image/webp"
-        media="(max-width: 767px)"
-      />
+      <BreadcrumbJsonLd items={[{ name: 'ホーム', url: 'https://www.opinio.co.jp' }]} />
 
-      {/* Hero Section */}
-      <section className="relative text-white overflow-hidden bg-primary-800 min-h-[calc(100svh-4rem)] md:min-h-[600px]">
-        {/* Mobile background */}
-        <div
-          className="absolute inset-0 bg-cover bg-center md:hidden"
-          style={{ backgroundImage: "url('/images/hero-mobile-bg.webp')" }}
-        />
-        {/* Desktop background */}
-        <div
-          className="absolute inset-0 bg-cover bg-center hidden md:block"
-          style={{ backgroundImage: "url('/images/opiniocorpherobackground.webp')" }}
-        />
-        {/* Overlay for text readability */}
-        <div
-          className="absolute inset-0 md:bg-transparent"
-          style={{
-            background: 'linear-gradient(to bottom, rgba(45,42,91,0.4) 0%, rgba(45,42,91,0.7) 50%, rgba(45,42,91,0.85) 100%)',
-          }}
-        />
-        <div
-          className="absolute inset-0 hidden md:block"
-          style={{
-            background: 'linear-gradient(to right, rgba(45,42,91,0.85) 0%, rgba(45,42,91,0.6) 35%, rgba(45,42,91,0.3) 55%, transparent 75%)',
-          }}
-        />
-        {/* Floating diamond photos - desktop only */}
-        <DiamondCarousel />
-        <div className="section-container relative flex items-end md:items-center min-h-[calc(100svh-4rem)] md:min-h-[600px] pb-12 pt-8 md:py-24">
-          <div className="max-w-3xl">
-            <p className="text-accent-400 font-medium mb-3 md:mb-4 tracking-wide text-sm md:text-base">
-              AI時代のキャリアインフラ
+      {/* ═══════════════════════════════════════════
+          HERO — white background, bold black type
+      ═══════════════════════════════════════════ */}
+      <section style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        background: '#fff',
+        borderBottom: '1px solid #000',
+        position: 'relative',
+      }}>
+        {/* Thin top line */}
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: '#000' }} />
+
+        <div className="container-v3" style={{ padding: '120px 40px 140px' }}>
+          {/* Eyebrow */}
+          <p className="hero-eyebrow-anim" style={{
+            fontFamily: 'var(--font-mono), monospace',
+            fontSize: 11, letterSpacing: '0.22em',
+            textTransform: 'uppercase',
+            color: '#999', marginBottom: 40,
+          }}>
+            AI ERA · CAREER INFRASTRUCTURE
+          </p>
+
+          {/* Main headline — very large */}
+          <h1 className="hero-title-anim" style={{
+            fontFamily: 'var(--font-display), Georgia, serif',
+            fontWeight: 700,
+            fontSize: 'clamp(44px, 6.5vw, 84px)',
+            lineHeight: 1.05,
+            letterSpacing: '-0.03em',
+            color: '#000',
+            marginBottom: 48,
+          }}>
+            AI時代の<br />
+            キャリアインフラを創る
+          </h1>
+
+          {/* Divider */}
+          <div style={{ width: 48, height: 2, background: '#000', marginBottom: 32 }} />
+
+          {/* Subtitle */}
+          <p className="hero-subtitle-anim" style={{
+            fontSize: 17, lineHeight: 1.9,
+            color: '#555',
+            marginBottom: 52,
+            maxWidth: 440,
+          }}>
+            エージェント事業とHR Techで、<br />
+            キャリアの意思決定に中立な第3者の目を。
+          </p>
+
+          {/* CTAs */}
+          <div className="hero-actions-anim" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
+            <Link href="/contact/?type=candidate" className="btn-v3 btn-v3-black btn-v3-large">
+              候補者相談を申し込む
+            </Link>
+            <Link href="/contact/?type=business" style={{
+              color: '#000', fontSize: 14, fontWeight: 500,
+              textDecoration: 'none', paddingBottom: 3,
+              borderBottom: '1px solid #000',
+            }}>
+              企業の採用相談はこちら →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          LOGO GRID — static, many logos at once
+      ═══════════════════════════════════════════ */}
+      <section style={{
+        padding: '72px 0 80px',
+        background: '#fff',
+        borderTop: '1px solid #E0E0E0',
+        borderBottom: '1px solid #E0E0E0',
+      }}>
+        <div className="container-v3">
+          {/* Heading */}
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <p style={{
+              fontFamily: 'var(--font-mono), monospace',
+              fontSize: 11, color: '#999',
+              letterSpacing: '0.18em', textTransform: 'uppercase',
+              marginBottom: 14,
+            }}>
+              TRUSTED BY 120+ COMPANIES
             </p>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-4 md:mb-6 leading-tight">
-              すべての選択肢に、
-              <br />
-              <span className="text-accent-400">納得のいくストーリー</span>を。
-            </h1>
-            <p className="text-base md:text-lg text-gray-300 mb-6 md:mb-8 leading-relaxed">
-              Opinioは、キャリアコンサルティングとHR Techの両輪で、
-              <br className="hidden md:block" />
-              人と組織のより良い出会いを実現します。
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <Link href="/service/" className="btn-primary text-center">
-                事業内容を見る
-                <ArrowRight className="ml-2 w-4 h-4" />
-              </Link>
-              <Link href="/contact/" className="btn-outline border-white text-white hover:bg-white hover:text-primary-800 text-center">
-                お問い合わせ
-              </Link>
-            </div>
+            <h2 style={{
+              fontFamily: 'var(--font-display), Georgia, serif',
+              fontWeight: 700,
+              fontSize: 'clamp(20px, 2.8vw, 30px)',
+              color: '#000', letterSpacing: '-0.01em',
+              lineHeight: 1.2,
+            }}>
+              IT/SaaS業界の企業に選ばれています
+            </h2>
           </div>
+
+          {/* Logo grid — DB images when available, text fallback otherwise */}
+          {consultingLogos.length > 0 ? (
+            <div className="logo-grid-v3" style={{
+              display: 'grid',
+              gap: 1, background: '#D0D0D0',
+              border: '1px solid #D0D0D0',
+            }}>
+              {consultingLogos.map((logo) => (
+                <div key={logo.id} style={{
+                  background: '#fff', aspectRatio: '2/1',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={logo.imageUrl} alt={logo.name}
+                    style={{ maxHeight: '55%', maxWidth: '72%', objectFit: 'contain', filter: 'grayscale(100%)' }} />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="logo-grid-v3" style={{
+              display: 'grid',
+              gap: 1, background: '#DEDEDE',
+              border: '1px solid #DEDEDE',
+            }}>
+              {[
+                'Sansan','HENNGE','Loglass','Speee','Stockmark','LAPRAS','TerraDrone','ROUTE06','Newji',
+                'Mobility','CADDi','SmartHR','freee','CrowdWorks','RevComm','Aigent','Hacobu','PR TIMES',
+                'Yappli','MoneyForward','UPWARD','Voicy','LayerX','Notion JP','10X','Algoage','Datable',
+                'Coral','Helpfeel','Asobica','Aill','Estie','Findy','QuickSnap','Caster','Tebiki',
+              ].map((name) => (
+                <div key={name} style={{
+                  background: '#fff',
+                  aspectRatio: '2/1',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontFamily: 'var(--font-sans), sans-serif',
+                  fontSize: 11,
+                  fontWeight: 600,
+                  color: '#555',
+                  letterSpacing: '0.02em',
+                  textAlign: 'center',
+                  padding: '0 6px',
+                  transition: 'background 0.2s, color 0.2s',
+                }}>
+                  {name}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Mission / Vision / Value */}
-      <section className="section-padding bg-gray-50">
-        <div className="section-container">
-          <div className="text-center mb-12">
-            <p className="text-accent-500 font-medium mb-2">CULTURE</p>
-            <h2 className="heading-2 text-primary-800">Opinioのカルチャー</h2>
-          </div>
+      {/* ═══════════════════════════════════════════
+          KPI STATS — dark (already dark component)
+      ═══════════════════════════════════════════ */}
+      <KpiStats />
 
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            {/* Vision */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary-100 text-primary-800 mb-4">
-                <Target className="w-6 h-6" />
-              </div>
-              <p className="text-sm font-medium text-accent-500 mb-2">VISION</p>
-              <h3 className="heading-3 text-primary-800 mb-3">
-                すべての選択肢に、
-                <br />
-                納得のいくストーリーを。
-              </h3>
-              <p className="text-gray-600 leading-relaxed">
-                キャリアの選択に「正解」はありません。しかし、納得できる選択はあります。
-                私たちは、一人ひとりが自分らしいキャリアを描けるよう支援します。
-              </p>
-            </div>
-
-            {/* Mission */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-accent-100 text-accent-600 mb-4">
-                <Lightbulb className="w-6 h-6" />
-              </div>
-              <p className="text-sm font-medium text-accent-500 mb-2">MISSION</p>
-              <h3 className="heading-3 text-primary-800 mb-3">
-                AI時代の
-                <br />
-                キャリアインフラになる。
-              </h3>
-              <p className="text-gray-600 leading-relaxed">
-                テクノロジーが仕事の在り方を変えていく時代。
-                私たちは、人と組織をつなぐインフラとして、透明で信頼できる仕組みを提供します。
-              </p>
-            </div>
-          </div>
-
-          {/* Values */}
-          <div className="bg-primary-800 rounded-2xl p-8 md:p-12 text-white">
-            <p className="text-sm font-medium text-accent-400 mb-2">VALUE</p>
-            <h3 className="heading-3 mb-8">私たちの価値観</h3>
-            <div className="grid md:grid-cols-3 gap-8">
-              <div>
-                <h4 className="text-lg font-bold mb-2">The Dream Team</h4>
-                <p className="text-sm text-gray-300">最高のチームを作る</p>
-              </div>
-              <div>
-                <h4 className="text-lg font-bold mb-2">Truth First</h4>
-                <p className="text-sm text-gray-300">真実を最優先に</p>
-              </div>
-              <div>
-                <h4 className="text-lg font-bold mb-2">Think Big</h4>
-                <p className="text-sm text-gray-300">大きく考える</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Services Overview */}
-      <section className="section-padding">
-        <div className="section-container">
-          <div className="text-center mb-12">
-            <p className="text-accent-500 font-medium mb-2">SERVICE</p>
-            <h2 className="heading-2 text-primary-800">事業内容</h2>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Career Consulting */}
-            <div className="group relative bg-white rounded-2xl border border-gray-200 p-8 hover:border-primary-300 hover:shadow-lg transition-all">
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-primary-100 text-primary-800 mb-6 group-hover:bg-primary-800 group-hover:text-white transition-colors">
-                <Briefcase className="w-7 h-7" />
-              </div>
-              <h3 className="heading-3 text-primary-800 mb-3">
-                キャリアコンサルティング事業
-              </h3>
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                転職支援とキャリアコンサルティングを通じて、求職者と企業の双方にとって
-                正直で信頼できる選択を支える仕組みを構築しています。
-              </p>
-              <Link
-                href="/service/#consulting"
-                className="inline-flex items-center text-primary-800 font-medium hover:text-accent-500 transition-colors"
-              >
-                詳しく見る
-                <ArrowRight className="ml-1 w-4 h-4" />
-              </Link>
-            </div>
-
-            {/* HR Tech SaaS */}
-            <div className="group relative bg-white rounded-2xl border border-gray-200 p-8 hover:border-primary-300 hover:shadow-lg transition-all">
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-accent-100 text-accent-600 mb-6 group-hover:bg-accent-500 group-hover:text-white transition-colors">
-                <Code className="w-7 h-7" />
-              </div>
-              <h3 className="heading-3 text-primary-800 mb-3">
-                HR Tech SaaS事業
-              </h3>
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                採用管理（ATS）を中核に、業務領域ごとに責任を分けたアプリ群で構成される
-                HR Techサービスを開発・提供しています。
-              </p>
-              <Link
-                href="/service/#saas"
-                className="inline-flex items-center text-primary-800 font-medium hover:text-accent-500 transition-colors"
-              >
-                詳しく見る
-                <ArrowRight className="ml-1 w-4 h-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* About Preview */}
-      <section className="section-padding bg-primary-800 text-white">
-        <div className="section-container">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <p className="text-accent-400 font-medium mb-2">ABOUT US</p>
-              <h2 className="heading-2 mb-6">
-                テクノロジーで
-                <br />
-                「透明性」を届ける。
+      {/* ═══════════════════════════════════════════
+          ABOUT — what OPINIO is
+      ═══════════════════════════════════════════ */}
+      <section style={{ padding: '120px 0', background: '#fff', borderTop: '1px solid #E0E0E0' }}>
+        <div className="container-v3">
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+            gap: 80, alignItems: 'start',
+          }}>
+            {/* Left: heading */}
+            <ScrollReveal>
+              <p style={{
+                fontFamily: 'var(--font-mono), monospace',
+                fontSize: 11, color: '#999',
+                letterSpacing: '0.22em', textTransform: 'uppercase',
+                marginBottom: 20,
+              }}>ABOUT</p>
+              <h2 style={{
+                fontFamily: 'var(--font-display), Georgia, serif',
+                fontWeight: 700,
+                fontSize: 'clamp(28px, 3.6vw, 48px)',
+                lineHeight: 1.15, letterSpacing: '-0.025em',
+                color: '#000', marginBottom: 0,
+              }}>
+                第3者に相談可能な<br />
+                キャリアプラットフォーム
               </h2>
-              <p className="text-gray-300 leading-relaxed mb-6">
+            </ScrollReveal>
+
+            {/* Right: description + two points */}
+            <ScrollReveal delay={80}>
+              <p style={{
+                fontSize: 16, color: '#444', lineHeight: 1.9,
+                marginBottom: 48,
+              }}>
                 私たちは、HR領域における「情報の信頼性」に向き合い、
                 求職者・企業の双方にとって正直で信頼できる選択を支える仕組みを構築しています。
                 第三者の声とテクノロジーを融合したプロダクトで、人と組織のよりよい出会いを実現していきます。
               </p>
-              <Link
-                href="/about/"
-                className="inline-flex items-center text-accent-400 font-medium hover:text-accent-300 transition-colors"
-              >
-                会社情報を見る
-                <ArrowRight className="ml-1 w-4 h-4" />
-              </Link>
-            </div>
-            <div className="flex items-center justify-center">
-              <div className="relative w-64 h-64 md:w-80 md:h-80">
-                <Image
-                  src="/images/dsc1636-circle.png"
-                  alt="代表取締役 柴 久人"
-                  fill
-                  className="object-contain"
-                  sizes="320px"
-                  loading="lazy"
-                />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 0, border: '1px solid #000' }}>
+                {[
+                  {
+                    label: '求職者の方へ',
+                    text: '企業のカルチャーや働き方を透明に。国家資格を持つキャリアコンサルタントへの相談も無料で利用できます。',
+                    href: '/contact/?type=candidate',
+                    linkText: '候補者相談を申し込む',
+                  },
+                  {
+                    label: '採用担当者の方へ',
+                    text: '自社の魅力を正しく届け、ミスマッチのない採用へ。IT/SaaS業界特化のプラットフォームで企業ページを開設できます。',
+                    href: '/contact/?type=business',
+                    linkText: '採用について相談する',
+                  },
+                ].map((item, i) => (
+                  <div key={item.label} style={{
+                    padding: '36px 40px',
+                    borderBottom: i === 0 ? '1px solid #000' : 'none',
+                  }}>
+                    <p style={{
+                      fontFamily: 'var(--font-mono), monospace',
+                      fontSize: 10, color: '#999',
+                      letterSpacing: '0.18em', textTransform: 'uppercase',
+                      marginBottom: 12,
+                    }}>{item.label}</p>
+                    <p style={{ fontSize: 14, color: '#555', lineHeight: 1.85, marginBottom: 20 }}>{item.text}</p>
+                    <Link href={item.href} style={{
+                      fontSize: 13, fontWeight: 600, color: '#000',
+                      textDecoration: 'none', borderBottom: '1px solid #000',
+                      paddingBottom: 2,
+                    }}>{item.linkText} →</Link>
+                  </div>
+                ))}
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="section-padding">
-        <div className="section-container">
-          <div className="bg-gradient-to-r from-primary-800 to-primary-700 rounded-2xl p-8 md:p-12 text-white text-center">
-            <h2 className="heading-2 mb-4">お気軽にお問い合わせください</h2>
-            <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
-              キャリアコンサルティングのご相談、HR Tech SaaSに関するお問い合わせなど、
-              まずはお気軽にご連絡ください。
-            </p>
-            <Link href="/contact/" className="btn-primary">
-              お問い合わせ
-              <ArrowRight className="ml-2 w-4 h-4" />
-            </Link>
+      {/* ═══════════════════════════════════════════
+          VISUAL BREAK — consulting image
+      ═══════════════════════════════════════════ */}
+      <section style={{ position: 'relative', height: 340, overflow: 'hidden' }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/consulting-image.webp"
+          alt="" aria-hidden="true"
+          style={{
+            position: 'absolute', inset: 0, width: '100%', height: '100%',
+            objectFit: 'cover', objectPosition: 'center 35%',
+            filter: 'grayscale(100%) brightness(0.5)',
+          }}
+        />
+        {/* Strong black overlay */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'rgba(0,0,0,0.6)',
+        }} />
+        <div className="container-v3" style={{
+          position: 'absolute', inset: 0,
+          display: 'flex', alignItems: 'center',
+          padding: '40px 40px',
+        }}>
+          <blockquote style={{
+            fontFamily: 'var(--font-display), Georgia, serif',
+            fontStyle: 'italic', fontWeight: 400,
+            fontSize: 'clamp(24px, 3.5vw, 40px)',
+            lineHeight: 1.6, color: '#fff',
+            borderLeft: '3px solid #fff',
+            paddingLeft: 32, maxWidth: 620, margin: 0,
+          }}>
+            キャリアの決断は、<br />
+            信頼できる第3者とともに。
+          </blockquote>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          SERVICES — two clear offerings
+      ═══════════════════════════════════════════ */}
+      <section style={{ padding: '120px 0', background: '#F5F5F5', borderTop: '1px solid #E0E0E0' }} id="service">
+        <div className="container-v3">
+          <ScrollReveal>
+            <p style={{
+              fontFamily: 'var(--font-mono), monospace',
+              fontSize: 11, color: '#999',
+              letterSpacing: '0.22em', textTransform: 'uppercase',
+              marginBottom: 20,
+            }}>SERVICE</p>
+            <h2 style={{
+              fontFamily: 'var(--font-display), Georgia, serif',
+              fontWeight: 700,
+              fontSize: 'clamp(28px, 3.6vw, 48px)',
+              lineHeight: 1.15, letterSpacing: '-0.025em',
+              color: '#000', marginBottom: 64,
+            }}>提供サービス</h2>
+          </ScrollReveal>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: 0, border: '1px solid #000',
+          }}>
+            {/* OPINIO — white */}
+            <ScrollReveal delay={60}>
+              <div style={{
+                padding: '52px 48px 60px',
+                background: '#fff',
+                borderRight: '1px solid #000',
+                height: '100%',
+              }}>
+                <p style={{
+                  fontFamily: 'var(--font-mono), monospace',
+                  fontSize: 10, color: '#999',
+                  letterSpacing: '0.2em', textTransform: 'uppercase',
+                  marginBottom: 20,
+                }}>01 — HR TECH PLATFORM</p>
+                <h3 style={{
+                  fontFamily: 'var(--font-display), Georgia, serif',
+                  fontStyle: 'italic', fontWeight: 600,
+                  fontSize: 30, color: '#000',
+                  marginBottom: 20, lineHeight: 1.1,
+                }}>OPINIO</h3>
+                <p style={{ fontSize: 15, color: '#555', lineHeight: 1.85, marginBottom: 40 }}>
+                  IT/SaaS業界の企業と求職者をつなぐ採用プラットフォーム。企業の求人情報・カルチャー・
+                  働き方を詳しく開示し、求職者が「入社後のギャップ」を感じない採用体験を提供します。
+                </p>
+                <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 40 }}>
+                  {['企業ページ・求人票の掲載', 'カジュアル面談の申込受付', 'キャリアメンター機能'].map(f => (
+                    <li key={f} style={{ fontSize: 13, color: '#666', display: 'flex', gap: 10, alignItems: 'center' }}>
+                      <span style={{ width: 4, height: 4, background: '#000', borderRadius: '50%', flexShrink: 0, display: 'inline-block' }} />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <div style={{ borderTop: '1px solid #E0E0E0' }}>
+                  {[
+                    { label: '企業ページを開設する', href: 'https://opinio.jp/business' },
+                    { label: '求人・企業を探す', href: 'https://opinio.jp' },
+                  ].map(link => (
+                    <a key={link.label} href={link.href}
+                      target="_blank" rel="noopener noreferrer"
+                      style={{
+                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                        padding: '15px 0', borderBottom: '1px solid #E0E0E0',
+                        color: '#000', textDecoration: 'none',
+                        fontSize: 13, fontWeight: 500,
+                      }}>
+                      <span>{link.label} <span style={{ fontSize: 10, color: '#bbb' }}>↗</span></span>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>→</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </ScrollReveal>
+
+            {/* Career Consulting — black */}
+            <ScrollReveal delay={120}>
+              <div style={{
+                padding: '52px 48px 60px',
+                background: '#000',
+                height: '100%',
+              }}>
+                <p style={{
+                  fontFamily: 'var(--font-mono), monospace',
+                  fontSize: 10, color: '#666',
+                  letterSpacing: '0.2em', textTransform: 'uppercase',
+                  marginBottom: 20,
+                }}>02 — CAREER AGENT</p>
+                <h3 style={{
+                  fontFamily: 'var(--font-display), Georgia, serif',
+                  fontStyle: 'italic', fontWeight: 600,
+                  fontSize: 30, color: '#fff',
+                  marginBottom: 20, lineHeight: 1.1,
+                }}>キャリアエージェント</h3>
+                <p style={{ fontSize: 15, color: '#aaa', lineHeight: 1.85, marginBottom: 40 }}>
+                  国家資格を持つキャリアコンサルタントが、IT/SaaS業界への転職・キャリアチェンジを個別にサポート。
+                  転職を急かさず、中長期的な視点で意思決定を支援します。
+                </p>
+                <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 40 }}>
+                  {['IT/SaaS業界特化の求人紹介', '国家資格保有コンサルタントが対応', '面談・書類添削・選考対策'].map(f => (
+                    <li key={f} style={{ fontSize: 13, color: '#888', display: 'flex', gap: 10, alignItems: 'center' }}>
+                      <span style={{ width: 4, height: 4, background: '#fff', borderRadius: '50%', flexShrink: 0, display: 'inline-block' }} />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <div style={{ borderTop: '1px solid #222' }}>
+                  {[
+                    { label: '採用について相談する', href: '/contact/?type=business' },
+                    { label: 'キャリア相談を申し込む', href: '/contact/?type=candidate' },
+                  ].map(link => (
+                    <Link key={link.label} href={link.href} style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      padding: '15px 0', borderBottom: '1px solid #222',
+                      color: '#fff', textDecoration: 'none',
+                      fontSize: 13, fontWeight: 500,
+                    }}>
+                      <span>{link.label}</span>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#888' }}>→</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </ScrollReveal>
           </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          CHALLENGE FLOW — 課題 → OPINIO → 解決
+      ═══════════════════════════════════════════ */}
+      <section style={{
+        padding: '100px 0',
+        background: '#fff',
+        borderTop: '1px solid #E0E0E0',
+      }}>
+        <div className="container-v3">
+          <ScrollReveal>
+            <p style={{
+              fontFamily: 'var(--font-mono), monospace',
+              fontSize: 11, color: '#999',
+              letterSpacing: '0.22em', textTransform: 'uppercase',
+              marginBottom: 20,
+            }}>PROBLEM → SOLUTION</p>
+            <h2 style={{
+              fontFamily: 'var(--font-display), Georgia, serif',
+              fontWeight: 700,
+              fontSize: 'clamp(28px, 3.6vw, 48px)',
+              lineHeight: 1.15, letterSpacing: '-0.025em',
+              color: '#000', marginBottom: 56,
+            }}>OPINIOが解決すること</h2>
+          </ScrollReveal>
+
+          <ScrollReveal delay={80}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/challenge-flow.png"
+              alt="課題から解決へ：企業のリアルが見えない・誰に相談すべきかわからない・企業側も魅力を届けられない → OPINIOが → 企業情報を透明に開示・国家資格キャリアコンサルタントが伴走・ミスマッチのない採用を実現"
+              style={{
+                width: '100%',
+                maxWidth: 1100,
+                display: 'block',
+                margin: '0 auto',
+                border: '1px solid #E0E0E0',
+              }}
+            />
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          FEATURES — 3 clear differentiators
+      ═══════════════════════════════════════════ */}
+      <section style={{
+        padding: '120px 0',
+        background: '#fff',
+        borderTop: '1px solid #E0E0E0',
+        borderBottom: '1px solid #E0E0E0',
+      }}>
+        <div className="container-v3">
+          <ScrollReveal>
+            <p style={{
+              fontFamily: 'var(--font-mono), monospace',
+              fontSize: 11, color: '#999',
+              letterSpacing: '0.22em', textTransform: 'uppercase',
+              marginBottom: 20,
+            }}>FEATURES</p>
+            <h2 style={{
+              fontFamily: 'var(--font-display), Georgia, serif',
+              fontWeight: 700,
+              fontSize: 'clamp(28px, 3.6vw, 48px)',
+              lineHeight: 1.15, letterSpacing: '-0.025em',
+              color: '#000', marginBottom: 64,
+            }}>OPINIOの特徴</h2>
+          </ScrollReveal>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+            gap: 0, border: '1px solid #000',
+          }}>
+            {[
+              {
+                num: '01',
+                tag: 'IT/SaaS特化',
+                title: '業界を深く知る\nチームが運営',
+                desc: '代表はSalesforceに6年在籍した経験を持ちます。求人票に書かれない業界の実態・企業文化・キャリアパスを熟知しているため、表面的でないマッチングを実現できます。',
+              },
+              {
+                num: '02',
+                tag: '国家資格保有',
+                title: '中立な立場で\n伴走するサポート',
+                desc: '転職を急かさず、候補者のキャリアにとって本当に良い選択を一緒に考えます。国家資格キャリアコンサルタントが、求職者・企業どちらにも公正な情報を提供します。',
+              },
+              {
+                num: '03',
+                tag: '早期離職率 0%',
+                title: 'ミスマッチを\n起こさない設計',
+                desc: '企業の透明な情報開示とキャリア相談を組み合わせることで、入社後のギャップを最小化。入社後の早期離職率0%という実績がその証明です。',
+              },
+            ].map((r, i) => (
+              <ScrollReveal key={r.num} delay={i * 80}>
+                <div style={{
+                  padding: '48px 40px 56px',
+                  background: '#fff',
+                  borderRight: i < 2 ? '1px solid #000' : 'none',
+                  height: '100%',
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32 }}>
+                    <span style={{
+                      fontFamily: 'var(--font-mono), monospace',
+                      fontSize: 28, fontWeight: 700, color: '#000',
+                      lineHeight: 1,
+                    }}>{r.num}</span>
+                    <span style={{
+                      fontFamily: 'var(--font-mono), monospace',
+                      fontSize: 10, color: '#555',
+                      padding: '3px 8px', border: '1px solid #bbb',
+                      letterSpacing: '0.06em',
+                    }}>{r.tag}</span>
+                  </div>
+                  <h3 style={{
+                    fontFamily: 'var(--font-display), Georgia, serif',
+                    fontWeight: 700, fontSize: 20,
+                    lineHeight: 1.45, marginBottom: 16,
+                    color: '#000', whiteSpace: 'pre-line',
+                  }}>{r.title}</h3>
+                  <p style={{ fontSize: 14, color: '#666', lineHeight: 1.9 }}>{r.desc}</p>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          LATEST — white bg
+      ═══════════════════════════════════════════ */}
+      <section style={{ padding: '120px 0', background: '#fff' }}>
+        <div className="container-v3">
+          <ScrollReveal>
+            <p style={{
+              fontFamily: 'var(--font-mono), monospace',
+              fontSize: 11, color: '#999',
+              letterSpacing: '0.22em', textTransform: 'uppercase',
+              marginBottom: 16,
+            }}>LATEST</p>
+            <h2 style={{
+              fontFamily: 'var(--font-display), Georgia, serif',
+              fontWeight: 700,
+              fontSize: 'clamp(32px, 4vw, 52px)',
+              lineHeight: 1.1, letterSpacing: '-0.025em',
+              color: '#000', marginBottom: 64,
+            }}>最新情報</h2>
+          </ScrollReveal>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 64 }}>
+            {[
+              {
+                col: 'News & Updates',
+                allHref: '/news/',
+                allLabel: 'ALL NEWS →',
+                items: [
+                  { date: '2026.05.20', cat: 'PRESS', title: 'OPINIOに「企業ページ下書き機能」「ジャンル別検索」を追加しました' },
+                  { date: '2026.05.13', cat: 'PRODUCT', title: 'OPINIOのβ版企業向け新機能をリリース、登録企業数が拡大中' },
+                  { date: '2026.04.28', cat: 'COMPANY', title: '代表 柴がJ-League OB会キャリア支援イベントに登壇しました' },
+                ],
+              },
+              {
+                col: 'Career Column',
+                allHref: '/blog/',
+                allLabel: 'ALL COLUMNS →',
+                items: [
+                  { date: '2026.05.18', cat: 'SAAS CAREER', title: 'SaaS業界でキャリアアップ転職する方法 — 市場価値を高める戦略とは' },
+                  { date: '2026.05.10', cat: 'SALES', title: '【SaaS営業の給与事情】未経験・経験者の年収相場とキャリアアップ方法' },
+                  { date: '2026.05.03', cat: 'AGENT', title: '転職エージェントと求人サイト、どっちを使うべき？違いを徹底比較' },
+                ],
+              },
+            ].map((col, ci) => (
+              <ScrollReveal key={col.col} delay={ci * 80}>
+                <div>
+                  <h3 style={{
+                    fontFamily: 'var(--font-display), Georgia, serif',
+                    fontWeight: 600, fontSize: 18,
+                    color: '#000', marginBottom: 0,
+                    paddingBottom: 16,
+                    borderBottom: '2px solid #000',
+                  }}>{col.col}</h3>
+                  {col.items.map((item, idx) => (
+                    <a key={item.title} href={col.allHref} style={{
+                      display: 'flex', flexDirection: 'column',
+                      padding: '20px 0',
+                      borderBottom: '1px solid #E0E0E0',
+                      textDecoration: 'none', color: 'inherit',
+                      transition: 'padding-left 0.2s',
+                    }}>
+                      <span style={{
+                        fontFamily: 'var(--font-mono), monospace',
+                        fontSize: 11, color: '#999', marginBottom: 6,
+                      }}>{item.date}</span>
+                      <span style={{
+                        display: 'inline-block',
+                        fontFamily: 'var(--font-mono), monospace', fontSize: 10,
+                        color: '#000', border: '1px solid #000',
+                        padding: '2px 7px', marginBottom: 8,
+                        letterSpacing: '0.05em',
+                      }}>{item.cat}</span>
+                      <span style={{
+                        fontSize: 14, fontWeight: 500,
+                        color: '#000', lineHeight: 1.65,
+                      }}>{item.title}</span>
+                    </a>
+                  ))}
+                  <a href={col.allHref} style={{
+                    display: 'inline-block', marginTop: 20,
+                    fontFamily: 'var(--font-mono), monospace', fontSize: 12,
+                    color: '#000', textDecoration: 'none',
+                    letterSpacing: '0.12em',
+                    borderBottom: '1px solid #000', paddingBottom: 2,
+                  }}>{col.allLabel}</a>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          FOOTER CTA — pure black
+      ═══════════════════════════════════════════ */}
+      <section style={{
+        background: '#000', color: '#fff',
+        padding: '120px 0', textAlign: 'center',
+        borderTop: '1px solid #000',
+      }}>
+        <div className="container-v3">
+          <ScrollReveal>
+            <div style={{ maxWidth: 680, margin: '0 auto' }}>
+              <p style={{
+                fontFamily: 'var(--font-mono), monospace',
+                fontSize: 11, letterSpacing: '0.22em',
+                textTransform: 'uppercase',
+                color: '#666', marginBottom: 24,
+              }}>GET IN TOUCH</p>
+              <h2 style={{
+                fontFamily: 'var(--font-display), Georgia, serif',
+                fontWeight: 700,
+                fontSize: 'clamp(32px, 5vw, 60px)',
+                lineHeight: 1.1, letterSpacing: '-0.025em',
+                marginBottom: 24, color: '#fff',
+              }}>
+                納得のいく選択を、<br />ご一緒に。
+              </h2>
+              <p style={{
+                fontSize: 16, lineHeight: 1.9,
+                color: '#aaa',
+                marginBottom: 52,
+                maxWidth: 440,
+                marginLeft: 'auto', marginRight: 'auto',
+              }}>
+                キャリア相談も、IT/SaaS人材の採用も、<br />OPINIOのご利用も。まずはお気軽にご相談ください。
+              </p>
+              <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
+                <Link href="/contact/?type=candidate" className="btn-v3 btn-v3-large btn-v3-on-black">
+                  候補者の方はこちら
+                </Link>
+                <Link href="/contact/?type=business" className="btn-v3 btn-v3-large btn-v3-on-black-outline">
+                  企業の方はこちら
+                </Link>
+              </div>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
     </>

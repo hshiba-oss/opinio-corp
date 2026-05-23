@@ -2,7 +2,9 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
-import { ArrowLeft, ArrowRight, MapPin, Clock, Building2, CheckCircle2, Star } from 'lucide-react'
+import { ArrowLeft, MapPin, Clock, Building2, CheckCircle2, Star } from 'lucide-react'
+import ScrollReveal from '@/components/ScrollReveal'
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd'
 
 interface Props {
   params: { id: string }
@@ -11,166 +13,211 @@ interface Props {
 export const revalidate = 60
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const job = await prisma.job.findFirst({
-    where: { slug: params.id, published: true },
-  })
+  let job: { title: string; description: string } | null = null
+  try {
+    job = await prisma.job.findFirst({ where: { slug: params.id, published: true } })
+  } catch { /* ignore */ }
   if (!job) return {}
 
   return {
     title: `${job.title} | 採用情報`,
     description: job.description.substring(0, 160),
+    openGraph: {
+      title: `${job.title} | 株式会社Opinio採用情報`,
+      description: job.description.substring(0, 160),
+      url: `https://www.opinio.co.jp/recruit/${params.id}/`,
+      images: [{ url: 'https://www.opinio.co.jp/images/ogp.png', width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${job.title} | 株式会社Opinio`,
+      description: job.description.substring(0, 160),
+      images: ['https://www.opinio.co.jp/images/ogp.png'],
+    },
   }
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="border-b border-gray-200 pb-8">
-      <h2 className="heading-3 text-primary-800 mb-4">{title}</h2>
+    <div style={{ borderBottom: '1px solid var(--border)', paddingBottom: 32, marginBottom: 32 }}>
+      <h2 style={{ fontFamily: 'var(--font-display), Georgia, serif', fontWeight: 500, fontSize: 20, color: 'var(--text-primary)', marginBottom: 16 }}>{title}</h2>
       {children}
     </div>
   )
 }
 
 export default async function RecruitDetailPage({ params }: Props) {
-  const job = await prisma.job.findFirst({
-    where: { slug: params.id, published: true },
-  })
-
-  if (!job) {
+  let job: Awaited<ReturnType<typeof prisma.job.findFirst>> = null
+  try {
+    job = await prisma.job.findFirst({ where: { slug: params.id, published: true } })
+  } catch {
     notFound()
   }
+  if (!job) notFound()
 
   return (
     <>
-      {/* Hero */}
-      <section className="relative text-white overflow-hidden bg-primary-800 py-16 md:py-20">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/images/opiniocorpherobackground.png')" }} />
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(45,42,91,0.85) 0%, rgba(45,42,91,0.6) 35%, rgba(45,42,91,0.3) 55%, transparent 75%)' }} />
-        <div className="section-container relative">
+      <BreadcrumbJsonLd items={[
+        { name: 'ホーム', url: 'https://www.opinio.co.jp' },
+        { name: '採用情報', url: 'https://www.opinio.co.jp/recruit/' },
+        { name: job.title, url: `https://www.opinio.co.jp/recruit/${params.id}/` },
+      ]} />
+
+      {/* Page Header */}
+      <section style={{ background: 'var(--bg)', paddingTop: 80, paddingBottom: 64, position: 'relative', borderBottom: '1px solid var(--border)' }}>
+        <div className="hero-dot-grid" aria-hidden="true" />
+        <div className="container-v3" style={{ position: 'relative' }}>
           <Link
             href="/recruit/"
-            className="inline-flex items-center text-sm text-gray-300 hover:text-white mb-4 transition-colors"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--text-muted)', textDecoration: 'none', marginBottom: 24, transition: 'color 0.2s' }}
           >
-            <ArrowLeft className="w-4 h-4 mr-1" />
+            <ArrowLeft style={{ width: 14, height: 14 }} />
             採用情報に戻る
           </Link>
-          <h1 className="text-2xl md:text-3xl font-bold mb-4">{job.title}</h1>
-          <div className="flex flex-wrap gap-4 text-sm text-gray-300">
-            <span className="flex items-center gap-1"><Building2 className="w-4 h-4" />{job.department}</span>
-            <span className="flex items-center gap-1"><Clock className="w-4 h-4" />{job.type}</span>
-            <span className="flex items-center gap-1"><MapPin className="w-4 h-4" />{job.location}</span>
+          <p className="section-eyebrow">RECRUIT</p>
+          <h1 style={{ fontFamily: 'var(--font-display), Georgia, serif', fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 500, lineHeight: 1.3, letterSpacing: '-0.02em', color: 'var(--text-primary)', marginBottom: 20 }}>
+            {job.title}
+          </h1>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, fontSize: 13, color: 'var(--text-secondary)' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Building2 style={{ width: 14, height: 14, color: 'var(--accent)' }} />{job.department}
+            </span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Clock style={{ width: 14, height: 14, color: 'var(--accent)' }} />{job.type}
+            </span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <MapPin style={{ width: 14, height: 14, color: 'var(--accent)' }} />{job.location}
+            </span>
           </div>
         </div>
       </section>
 
       {/* Content */}
-      <section className="section-padding">
-        <div className="section-container">
-          <div className="max-w-3xl mx-auto space-y-8">
+      <section className="section-v3">
+        <div className="container-v3">
+          <div style={{ maxWidth: 760 }}>
 
-            {/* 仕事内容 */}
-            <Section title="仕事内容">
-              <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{job.description}</p>
-            </Section>
+            <ScrollReveal>
+              <Section title="仕事内容">
+                <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.9, whiteSpace: 'pre-wrap' }}>{job.description}</p>
+              </Section>
+            </ScrollReveal>
 
-            {/* 対象となる方 */}
             {(job.targetAudience || job.requirements.length > 0 || job.preferred.length > 0) && (
-              <Section title="対象となる方">
-                {job.targetAudience && (
-                  <p className="text-gray-700 leading-relaxed whitespace-pre-wrap mb-4">{job.targetAudience}</p>
-                )}
-                {job.requirements.length > 0 && (
-                  <div className="mb-4">
-                    <h3 className="text-sm font-bold text-gray-800 mb-2">必須要件</h3>
-                    <ul className="space-y-2">
-                      {job.requirements.map((req, i) => (
-                        <li key={i} className="flex items-start gap-2 text-gray-700">
-                          <CheckCircle2 className="w-5 h-5 text-accent-500 flex-shrink-0 mt-0.5" />{req}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {job.preferred.length > 0 && (
-                  <div>
-                    <h3 className="text-sm font-bold text-gray-800 mb-2">歓迎要件</h3>
-                    <ul className="space-y-2">
-                      {job.preferred.map((pref, i) => (
-                        <li key={i} className="flex items-start gap-2 text-gray-700">
-                          <Star className="w-5 h-5 text-accent-400 flex-shrink-0 mt-0.5" />{pref}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </Section>
+              <ScrollReveal>
+                <Section title="対象となる方">
+                  {job.targetAudience && (
+                    <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.9, whiteSpace: 'pre-wrap', marginBottom: 16 }}>{job.targetAudience}</p>
+                  )}
+                  {job.requirements.length > 0 && (
+                    <div style={{ marginBottom: 16 }}>
+                      <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 10 }}>必須要件</h3>
+                      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                        {job.requirements.map((req, i) => (
+                          <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 14, color: 'var(--text-secondary)' }}>
+                            <CheckCircle2 style={{ width: 16, height: 16, color: 'var(--accent)', flexShrink: 0, marginTop: 2 }} />{req}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {job.preferred.length > 0 && (
+                    <div>
+                      <h3 style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 10 }}>歓迎要件</h3>
+                      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                        {job.preferred.map((pref, i) => (
+                          <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 14, color: 'var(--text-secondary)' }}>
+                            <Star style={{ width: 16, height: 16, color: 'var(--accent)', flexShrink: 0, marginTop: 2 }} />{pref}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </Section>
+              </ScrollReveal>
             )}
 
-            {/* 勤務地 */}
             {job.locationDetail && (
-              <Section title="勤務地">
-                <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{job.locationDetail}</p>
-              </Section>
+              <ScrollReveal>
+                <Section title="勤務地">
+                  <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.9, whiteSpace: 'pre-wrap' }}>{job.locationDetail}</p>
+                </Section>
+              </ScrollReveal>
             )}
 
-            {/* 勤務時間 */}
             {job.workHours && (
-              <Section title="勤務時間">
-                <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{job.workHours}</p>
-              </Section>
+              <ScrollReveal>
+                <Section title="勤務時間">
+                  <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.9, whiteSpace: 'pre-wrap' }}>{job.workHours}</p>
+                </Section>
+              </ScrollReveal>
             )}
 
-            {/* 雇用形態 */}
             {job.employmentDetail && (
-              <Section title="雇用形態">
-                <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{job.employmentDetail}</p>
-              </Section>
+              <ScrollReveal>
+                <Section title="雇用形態">
+                  <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.9, whiteSpace: 'pre-wrap' }}>{job.employmentDetail}</p>
+                </Section>
+              </ScrollReveal>
             )}
 
-            {/* 給与 */}
             {job.salary && (
-              <Section title="給与">
-                <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{job.salary}</p>
-              </Section>
+              <ScrollReveal>
+                <Section title="給与">
+                  <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.9, whiteSpace: 'pre-wrap' }}>{job.salary}</p>
+                </Section>
+              </ScrollReveal>
             )}
 
-            {/* 待遇・福利厚生 */}
             {(job.welfare || job.benefits.length > 0) && (
-              <Section title="待遇・福利厚生">
-                {job.welfare && (
-                  <p className="text-gray-700 leading-relaxed whitespace-pre-wrap mb-4">{job.welfare}</p>
-                )}
-                {job.benefits.length > 0 && (
-                  <ul className="space-y-2">
-                    {job.benefits.map((benefit, i) => (
-                      <li key={i} className="flex items-start gap-2 text-gray-700">
-                        <CheckCircle2 className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />{benefit}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </Section>
+              <ScrollReveal>
+                <Section title="待遇・福利厚生">
+                  {job.welfare && (
+                    <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.9, whiteSpace: 'pre-wrap', marginBottom: 16 }}>{job.welfare}</p>
+                  )}
+                  {job.benefits.length > 0 && (
+                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      {job.benefits.map((benefit, i) => (
+                        <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 14, color: 'var(--text-secondary)' }}>
+                          <CheckCircle2 style={{ width: 16, height: 16, color: 'var(--accent)', flexShrink: 0, marginTop: 2 }} />{benefit}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </Section>
+              </ScrollReveal>
             )}
 
-            {/* 休日・休暇 */}
             {job.holidays && (
-              <Section title="休日・休暇">
-                <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{job.holidays}</p>
-              </Section>
+              <ScrollReveal>
+                <Section title="休日・休暇">
+                  <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.9, whiteSpace: 'pre-wrap' }}>{job.holidays}</p>
+                </Section>
+              </ScrollReveal>
             )}
 
             {/* CTA */}
-            <div className="bg-gray-50 rounded-2xl p-8 text-center">
-              <h3 className="heading-3 text-primary-800 mb-4">この職種に応募する</h3>
-              <p className="text-gray-600 mb-6">ご興味をお持ちの方は、お気軽にお問い合わせください。</p>
-              <Link href="/contact/" className="btn-primary">
-                お問い合わせ<ArrowRight className="ml-2 w-4 h-4" />
-              </Link>
-            </div>
+            <ScrollReveal>
+              <div style={{ background: 'var(--accent-soft)', border: '1px solid var(--accent-light)', borderRadius: 12, padding: 40, textAlign: 'center', marginTop: 16 }}>
+                <h3 style={{ fontFamily: 'var(--font-display), Georgia, serif', fontWeight: 500, fontSize: 22, color: 'var(--text-primary)', marginBottom: 12 }}>
+                  この職種に応募する
+                </h3>
+                <p style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: 24, lineHeight: 1.7 }}>
+                  ご興味をお持ちの方は、お気軽にお問い合わせください。
+                </p>
+                <Link href="/contact/" className="btn-v3 btn-v3-primary btn-v3-large">
+                  お問い合わせ →
+                </Link>
+              </div>
+            </ScrollReveal>
 
-            <div className="pt-8 border-t border-gray-200">
-              <Link href="/recruit/" className="inline-flex items-center text-primary-800 hover:text-accent-500 font-medium transition-colors">
-                <ArrowLeft className="w-4 h-4 mr-1" />採用情報に戻る
+            <div style={{ marginTop: 40, paddingTop: 32, borderTop: '1px solid var(--border)' }}>
+              <Link
+                href="/recruit/"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 14, color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s' }}
+              >
+                <ArrowLeft style={{ width: 14, height: 14 }} />
+                採用情報に戻る
               </Link>
             </div>
           </div>

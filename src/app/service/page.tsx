@@ -1,13 +1,27 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
-import { Briefcase, Code, Users, FileText, MessageSquare, Globe, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import { FileText, Users, MessageSquare, Globe } from 'lucide-react'
 import PageHeader from '@/components/PageHeader'
+import ScrollReveal from '@/components/ScrollReveal'
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd'
 import { prisma } from '@/lib/prisma'
 
 export const metadata: Metadata = {
   title: '事業内容',
   description: 'Opinioのキャリアコンサルティング事業とHR Tech SaaS事業についてご紹介します。',
+  openGraph: {
+    title: '事業内容 | 株式会社Opinio',
+    description: 'Opinioのキャリアコンサルティング事業とHR Tech SaaS事業についてご紹介します。',
+    url: 'https://www.opinio.co.jp/service/',
+    images: [{ url: 'https://www.opinio.co.jp/images/ogp.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '事業内容 | 株式会社Opinio',
+    description: 'キャリアコンサルティング事業とHR Tech SaaS事業の2つの柱で事業を展開しています。',
+    images: ['https://www.opinio.co.jp/images/ogp.png'],
+  },
 }
 
 const saasProducts = [
@@ -38,211 +52,325 @@ const saasProducts = [
 ]
 
 export default async function ServicePage() {
-  const consultingLogos = await prisma.logo.findMany({
-    where: { published: true, category: 'consulting' },
-    orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
-  })
+  let consultingLogos: { id: string; imageUrl: string; name: string }[] = []
+  let saasLogos: { id: string; imageUrl: string; name: string }[] = []
 
-  const saasLogos = await prisma.logo.findMany({
-    where: { published: true, category: 'saas' },
-    orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
-  })
+  try {
+    consultingLogos = await prisma.logo.findMany({
+      where: { published: true, category: 'consulting' },
+      orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
+    })
+    saasLogos = await prisma.logo.findMany({
+      where: { published: true, category: 'saas' },
+      orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
+    })
+  } catch {
+    // DB unavailable in local dev — logos section hidden
+  }
 
   return (
     <>
+      <BreadcrumbJsonLd items={[
+        { name: 'ホーム', url: 'https://www.opinio.co.jp' },
+        { name: '事業内容', url: 'https://www.opinio.co.jp/service/' },
+      ]} />
+
       <PageHeader subtitle="SERVICE" title="事業内容" />
 
       {/* Intro */}
-      <section className="section-padding">
-        <div className="section-container">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="heading-2 text-primary-800 mb-6">
-              コンサルティングで得た知見を
-              <br />
-              プロダクトに還元する
-            </h2>
-            <p className="text-gray-600 leading-relaxed">
+      <section className="section-v3">
+        <div className="container-v3">
+          <ScrollReveal>
+            <div className="section-mark">
+              <span className="section-mark-num">01</span>
+              <div className="section-mark-line" />
+            </div>
+            <p className="section-eyebrow">OVERVIEW</p>
+            <h2 className="section-title-v3">コンサルティングで得た知見を<br />プロダクトに還元する</h2>
+            <p className="section-subtitle-v3" style={{ marginTop: 12 }}>
               Opinioは、キャリアコンサルティング事業とHR Tech SaaS事業の2つの柱で事業を展開しています。
-              現場で得たリアルな知見をテクノロジーに落とし込み、
-              人と組織の課題を本質的に解決するサービスを提供します。
+              現場で得たリアルな知見をテクノロジーに落とし込み、人と組織の課題を本質的に解決するサービスを提供します。
             </p>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* Consulting */}
-      <section id="consulting" className="section-padding bg-gray-50 scroll-mt-20">
-        <div className="section-container">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-800 text-white mb-6">
-                <Briefcase className="w-8 h-8" />
+      <section id="consulting" style={{ padding: '80px 0', background: 'var(--accent-soft)', scrollMarginTop: 80 }}>
+        <div className="container-v3">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <ScrollReveal>
+              <div>
+                <div className="section-mark">
+                  <span className="section-mark-num">02</span>
+                  <div className="section-mark-line" />
+                </div>
+                <p className="section-eyebrow">CONSULTING</p>
+                <h2 className="section-title-v3">キャリアコンサルティング事業</h2>
+                <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.85, marginBottom: 28 }}>
+                  転職支援とキャリアコンサルティングを通じて、求職者と企業の双方にとって
+                  「正直で信頼できる選択」を支える仕組みを構築しています。
+                </p>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 32 }}>
+                  {[
+                    { n: '1', title: '転職支援', desc: 'SaaS業界を中心に、キャリアアップを目指す方の転職をサポート' },
+                    { n: '2', title: 'キャリアコンサルティング', desc: '国家資格を持つコンサルタントによる、中長期的なキャリア設計支援' },
+                    { n: '3', title: '企業向け採用支援', desc: '採用戦略の策定から実行まで、一気通貫でサポート' },
+                  ].map((item) => (
+                    <div key={item.n} style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+                      <div
+                        style={{
+                          width: 28,
+                          height: 28,
+                          borderRadius: '50%',
+                          background: 'var(--accent)',
+                          color: 'white',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: 12,
+                          fontWeight: 600,
+                          flexShrink: 0,
+                          marginTop: 2,
+                        }}
+                      >
+                        {item.n}
+                      </div>
+                      <div>
+                        <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 2 }}>{item.title}</p>
+                        <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.7 }}>{item.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <Link href="/contact/" className="btn-v3 btn-v3-primary">
+                  採用相談をする →
+                </Link>
               </div>
-              <p className="text-accent-500 font-medium mb-2">CONSULTING</p>
-              <h2 className="heading-2 text-primary-800 mb-6">
-                キャリアコンサルティング事業
-              </h2>
-              <p className="text-gray-600 leading-relaxed mb-6">
-                転職支援とキャリアコンサルティングを通じて、
-                求職者と企業の双方にとって「正直で信頼できる選択」を支える仕組みを構築しています。
-              </p>
-              <ul className="space-y-4 mb-8">
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-accent-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-accent-600 text-sm font-bold">1</span>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-primary-800">転職支援</h4>
-                    <p className="text-sm text-gray-600">SaaS業界を中心に、キャリアアップを目指す方の転職をサポート</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-accent-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-accent-600 text-sm font-bold">2</span>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-primary-800">キャリアコンサルティング</h4>
-                    <p className="text-sm text-gray-600">国家資格を持つコンサルタントによる、中長期的なキャリア設計支援</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-accent-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-accent-600 text-sm font-bold">3</span>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-primary-800">企業向け採用支援</h4>
-                    <p className="text-sm text-gray-600">採用戦略の策定から実行まで、一気通貫でサポート</p>
-                  </div>
-                </li>
-              </ul>
-              <Link href="/contact/" className="btn-secondary">
-                相談する
-                <ArrowRight className="ml-2 w-4 h-4" />
-              </Link>
-            </div>
-            <div className="relative">
-              <div className="rounded-2xl aspect-square overflow-hidden relative">
+            </ScrollReveal>
+
+            <ScrollReveal delay={150}>
+              <div style={{ position: 'relative', aspectRatio: '1', borderRadius: 12, overflow: 'hidden' }}>
                 <Image
                   src="/images/consulting-image.png"
                   alt="キャリアコンサルティング事業"
                   fill
                   className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   loading="lazy"
                 />
               </div>
-            </div>
+            </ScrollReveal>
           </div>
 
-          {/* Consulting Logos */}
           {consultingLogos.length > 0 && (
-            <div className="mt-16">
-              <h3 className="text-center text-sm font-medium text-gray-500 uppercase tracking-wider mb-8">
-                導入企業実績
-              </h3>
-              <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                {consultingLogos.map((logo) => (
-                  <div
-                    key={logo.id}
-                    className="bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-center aspect-[3/2] hover:shadow-md transition-shadow"
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={logo.imageUrl}
-                      alt={logo.name}
-                      className="max-h-full max-w-full object-contain"
-                    />
-                  </div>
-                ))}
+            <ScrollReveal delay={200}>
+              <div style={{ marginTop: 64, paddingTop: 48, borderTop: '1px solid var(--border)' }}>
+                <p
+                  style={{
+                    textAlign: 'center',
+                    fontFamily: 'var(--font-mono), monospace',
+                    fontSize: 11,
+                    color: 'var(--text-muted)',
+                    letterSpacing: '0.12em',
+                    textTransform: 'uppercase',
+                    marginBottom: 32,
+                  }}
+                >
+                  導入企業実績
+                </p>
+                <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
+                  {consultingLogos.map((logo) => (
+                    <div
+                      key={logo.id}
+                      style={{
+                        background: 'var(--bg-card)',
+                        border: '1px solid var(--border)',
+                        borderRadius: 8,
+                        padding: 16,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        aspectRatio: '3/2',
+                      }}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={logo.imageUrl} alt={logo.name} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }} />
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            </ScrollReveal>
           )}
         </div>
       </section>
 
       {/* SaaS */}
-      <section id="saas" className="section-padding scroll-mt-20">
-        <div className="section-container">
-          <div className="max-w-3xl mx-auto text-center mb-12">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-accent-500 text-white mb-6">
-              <Code className="w-8 h-8" />
+      <section id="saas" className="section-v3" style={{ scrollMarginTop: 80 }}>
+        <div className="container-v3">
+          <ScrollReveal>
+            <div className="section-mark">
+              <span className="section-mark-num">03</span>
+              <div className="section-mark-line" />
             </div>
-            <p className="text-accent-500 font-medium mb-2">HR TECH SAAS</p>
-            <h2 className="heading-2 text-primary-800 mb-6">
-              HR Tech SaaS事業
-            </h2>
-            <p className="text-gray-600 leading-relaxed">
-              採用管理（ATS）を中核に、業務領域ごとに責任を分けたアプリ群で構成される
-              HR Techサービスを開発・提供しています。
+            <p className="section-eyebrow">HR TECH SAAS</p>
+            <h2 className="section-title-v3">HR Tech SaaS事業</h2>
+            <p className="section-subtitle-v3" style={{ marginTop: 12 }}>
+              採用管理（ATS）を中核に、業務領域ごとに責任を分けたアプリ群で構成されるHR Techサービスを開発・提供しています。
               各アプリは疎結合で、将来的な追加・分離を前提とした設計です。
             </p>
-          </div>
+          </ScrollReveal>
 
-          {/* Product Grid */}
-          <div className="grid md:grid-cols-2 gap-6">
-            {saasProducts.map((product) => (
-              <div
-                key={product.name}
-                className="bg-white rounded-2xl border border-gray-200 p-6 hover:border-primary-300 hover:shadow-lg transition-all"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary-100 text-primary-800">
-                    <product.icon className="w-6 h-6" />
+          <div className="grid md:grid-cols-2 gap-6" style={{ marginTop: 48 }}>
+            {saasProducts.map((product, i) => (
+              <ScrollReveal key={product.name} delay={i * 80}>
+                <div className="service-card-v3" style={{ height: '100%' }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 20 }}>
+                    <div
+                      style={{
+                        width: 44,
+                        height: 44,
+                        borderRadius: 10,
+                        background: 'var(--accent-soft)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <product.icon style={{ width: 20, height: 20, color: 'var(--accent)' }} />
+                    </div>
+                    <span
+                      style={{
+                        fontSize: 11,
+                        fontWeight: 500,
+                        padding: '4px 10px',
+                        borderRadius: 20,
+                        background: product.status === '提供中' ? 'var(--accent-light)' : 'var(--border)',
+                        color: product.status === '提供中' ? 'var(--accent)' : 'var(--text-muted)',
+                      }}
+                    >
+                      {product.status}
+                    </span>
                   </div>
-                  <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-                    product.status === '提供中'
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-gray-100 text-gray-600'
-                  }`}>
-                    {product.status}
-                  </span>
+                  <h3 style={{ fontSize: 16, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 8 }}>{product.name}</h3>
+                  <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.75 }}>{product.description}</p>
                 </div>
-                <h3 className="text-lg font-bold text-primary-800 mb-2">{product.name}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">{product.description}</p>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
 
-          {/* SaaS Logos */}
           {saasLogos.length > 0 && (
-            <div className="mt-16">
-              <h3 className="text-center text-sm font-medium text-gray-500 uppercase tracking-wider mb-8">
-                導入企業実績
-              </h3>
-              <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                {saasLogos.map((logo) => (
-                  <div
-                    key={logo.id}
-                    className="bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-center aspect-[3/2] hover:shadow-md transition-shadow"
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={logo.imageUrl}
-                      alt={logo.name}
-                      className="max-h-full max-w-full object-contain"
-                    />
+            <ScrollReveal delay={200}>
+              <div style={{ marginTop: 64, paddingTop: 48, borderTop: '1px solid var(--border)' }}>
+                <p
+                  style={{
+                    textAlign: 'center',
+                    fontFamily: 'var(--font-mono), monospace',
+                    fontSize: 11,
+                    color: 'var(--text-muted)',
+                    letterSpacing: '0.12em',
+                    textTransform: 'uppercase',
+                    marginBottom: 32,
+                  }}
+                >
+                  導入企業実績
+                </p>
+                <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
+                  {saasLogos.map((logo) => (
+                    <div
+                      key={logo.id}
+                      style={{
+                        background: 'var(--bg-card)',
+                        border: '1px solid var(--border)',
+                        borderRadius: 8,
+                        padding: 16,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        aspectRatio: '3/2',
+                      }}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={logo.imageUrl} alt={logo.name} style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </ScrollReveal>
+          )}
+        </div>
+      </section>
+
+      {/* Cases Teaser */}
+      <section style={{ padding: '80px 0', background: 'var(--accent-soft)' }}>
+        <div className="container-v3">
+          <ScrollReveal>
+            <div style={{ maxWidth: 760, margin: '0 auto', textAlign: 'center' }}>
+              <p className="section-eyebrow">CASES</p>
+              <h2 className="section-title-v3">導入事例</h2>
+              <p className="section-subtitle-v3" style={{ marginTop: 12, marginBottom: 40 }}>
+                採用支援・HR Techを通じて、企業の採用課題を解決してきた事例を順次公開しています。
+              </p>
+              <div className="grid md:grid-cols-3 gap-6" style={{ textAlign: 'left', marginBottom: 40 }}>
+                {[
+                  { num: '36+', label: '支援企業数', desc: 'SaaS・IT業界を中心に多数の企業を支援' },
+                  { num: '0%', label: '早期離職率', desc: '入社後のミスマッチを防ぐ丁寧な支援' },
+                  { num: '200+', label: '支援実績', desc: 'キャリア転換・採用成功の実績' },
+                ].map((stat) => (
+                  <div key={stat.num} style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 12, padding: 28 }}>
+                    <p style={{ fontFamily: 'var(--font-mono), monospace', fontSize: 32, fontWeight: 600, color: 'var(--accent)', letterSpacing: '-0.02em', marginBottom: 4 }}>
+                      {stat.num}
+                    </p>
+                    <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 6 }}>{stat.label}</p>
+                    <p style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.7 }}>{stat.desc}</p>
                   </div>
                 ))}
               </div>
+              <Link href="/cases/" className="btn-v3 btn-v3-primary">
+                導入事例を見る →
+              </Link>
             </div>
-          )}
-
+          </ScrollReveal>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="section-padding bg-gray-50">
-        <div className="section-container">
-          <div className="bg-gradient-to-r from-primary-800 to-primary-700 rounded-2xl p-8 md:p-12 text-white text-center">
-            <h2 className="heading-2 mb-4">お気軽にお問い合わせください</h2>
-            <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
+      <section style={{ padding: '80px 0', background: 'var(--bg-dark)' }}>
+        <div className="container-v3" style={{ textAlign: 'center' }}>
+          <ScrollReveal>
+            <p
+              style={{
+                fontFamily: 'var(--font-mono), monospace',
+                fontSize: 11,
+                color: 'var(--accent-light)',
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+                marginBottom: 16,
+              }}
+            >
+              GET IN TOUCH
+            </p>
+            <h2
+              style={{
+                fontFamily: 'var(--font-display), Georgia, serif',
+                fontSize: 'clamp(26px, 4vw, 40px)',
+                fontWeight: 500,
+                color: 'white',
+                lineHeight: 1.35,
+                marginBottom: 16,
+              }}
+            >
+              お気軽にお問い合わせください
+            </h2>
+            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', marginBottom: 40, lineHeight: 1.7 }}>
               サービスに関するご質問、導入のご相談など、まずはお気軽にご連絡ください。
             </p>
-            <Link href="/contact/" className="btn-primary">
-              お問い合わせ
-              <ArrowRight className="ml-2 w-4 h-4" />
+            <Link href="/contact/" className="btn-v3 btn-v3-large btn-v3-on-green-primary">
+              お問い合わせ →
             </Link>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
     </>

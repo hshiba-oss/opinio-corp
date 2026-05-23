@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /api/
+Disallow: /privacy/
+Disallow: /terms/
+
+Sitemap: https://www.opinio.co.jp/sitemap.xml

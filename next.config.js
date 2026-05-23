@@ -13,9 +13,7 @@ const nextConfig = {
       // 旧WordPress: /voice
       { source: '/voice/:path*', destination: '/', permanent: true },
       // 旧ページ
-      { source: '/terms', destination: '/privacy/', permanent: true },
-      { source: '/terms/', destination: '/privacy/', permanent: true },
-      { source: '/privacy-policy', destination: '/privacy/', permanent: true },
+{ source: '/privacy-policy', destination: '/privacy/', permanent: true },
       { source: '/privacy-policy/', destination: '/privacy/', permanent: true },
       { source: '/contact-recruit', destination: '/contact/', permanent: true },
       { source: '/contact-recruit/', destination: '/contact/', permanent: true },
