@@ -190,23 +190,8 @@ export default function AboutPage() {
             }}>代表メッセージ</h2>
           </ScrollReveal>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 72, alignItems: 'start', maxWidth: 960 }}>
+          <div style={{ maxWidth: 720 }}>
             <ScrollReveal delay={60}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/ceo1.png"
-                alt="代表取締役 柴 久人"
-                style={{
-                  width: '100%',
-                  aspectRatio: '1',
-                  objectFit: 'cover',
-                  display: 'block',
-                  filter: 'grayscale(20%)',
-                }}
-              />
-            </ScrollReveal>
-
-            <ScrollReveal delay={120}>
               <div>
                 <h3 style={{
                   fontFamily: 'var(--font-display), Georgia, serif',
