@@ -94,17 +94,15 @@ export default async function Home() {
           LOGO GRID — static, many logos at once
       ═══════════════════════════════════════════ */}
       <section style={{
-        padding: '72px 0 80px',
-        background: '#fff',
-        borderTop: '1px solid #E0E0E0',
-        borderBottom: '1px solid #E0E0E0',
+        padding: '80px 0 96px',
+        background: '#F4F4F4',
       }}>
         <div className="container-v3">
           {/* Heading */}
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+          <div style={{ textAlign: 'center', marginBottom: 52 }}>
             <p style={{
               fontFamily: 'var(--font-mono), monospace',
-              fontSize: 11, color: '#999',
+              fontSize: 11, color: '#aaa',
               letterSpacing: '0.18em', textTransform: 'uppercase',
               marginBottom: 14,
             }}>
@@ -121,15 +119,14 @@ export default async function Home() {
             </h2>
           </div>
 
-          {/* Logo grid — カラーロゴ画像 */}
-          <div className="logo-grid-v3" style={{
+          {/* Logo cards — float style */}
+          <div style={{
             display: 'grid',
-            gap: 1, background: '#E8E8E8',
-            border: '1px solid #E8E8E8',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+            gap: 12,
           }}>
             {[
               { file: 'sansan.png',       name: 'Sansan' },
-              { file: 'hennge.png',       name: 'HENNGE' },
               { file: 'loglass.png',      name: 'Loglass' },
               { file: 'caddi.png',        name: 'CADDi' },
               { file: 'estie.png',        name: 'Estie' },
@@ -143,7 +140,6 @@ export default async function Home() {
               { file: 'xmile.png',        name: 'X Mile' },
               { file: 'talentx.png',      name: 'TalentX' },
               { file: 'skillnote.png',    name: 'Skillnote' },
-              { file: 'smaregi.png',      name: 'Smaregi' },
               { file: 'plex.png',         name: 'Plex' },
               { file: 'nexta.png',        name: 'Nexta' },
               { file: 'mntsq.jpg',        name: 'MNTSQ' },
@@ -152,30 +148,33 @@ export default async function Home() {
               { file: 'ingage.png',       name: 'Ingage' },
               { file: 'trustdock.jpg',    name: 'Trustdock' },
               { file: 'softbrain.jpg',    name: 'Softbrain' },
-              { file: 'smart-soudan.png', name: 'SmartSoudan' },
+              { file: 'smart-soudan.png', name: 'Smart相談室' },
               { file: 'salesnow.jpeg',    name: 'SalesNow' },
               { file: 'batonz.png',       name: 'バトンズ' },
-              { file: 'archivillage.png', name: 'Archivillage' },
+              { file: 'archivillage.png', name: 'ArchiVillage' },
               { file: 'plan-b.png',       name: 'Plan-B' },
               { file: 'epicbase.jpeg',    name: 'EpicBase' },
               { file: 'connexion.jpg',    name: 'Connexion' },
-              { file: 'hurray3.png',      name: 'Hurray3' },
+              { file: 'hurray3.png',      name: '1ROLL' },
             ].map((logo) => (
-              <div key={logo.name + logo.file} style={{
+              <div key={logo.file} style={{
                 background: '#fff',
-                aspectRatio: '5/3',
+                borderRadius: 10,
+                border: '1px solid #E8E8E8',
+                boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+                height: 88,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: '16px 20px',
+                padding: '0 20px',
               }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={`/images/logos/${logo.file}`}
                   alt={logo.name}
                   style={{
-                    maxHeight: '72%',
-                    maxWidth: '84%',
+                    maxHeight: 44,
+                    maxWidth: 120,
                     objectFit: 'contain',
                     display: 'block',
                   }}
