@@ -1,25 +1,17 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
-import { MapPin, Clock, Building2, Users } from 'lucide-react'
-import PageHeader from '@/components/PageHeader'
 import ScrollReveal from '@/components/ScrollReveal'
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd'
 
 export const metadata: Metadata = {
-  title: '採用情報',
-  description: '株式会社Opinioの採用情報です。一緒にAI時代のキャリアインフラを創りませんか。',
+  title: '採用情報 | OPINIO',
+  description: '株式会社OPINIOの採用情報です。一緒にAI時代のキャリアインフラを創りませんか。',
   openGraph: {
-    title: '採用情報 | 株式会社Opinio',
+    title: '採用情報 | OPINIO',
     description: 'AI時代のキャリアインフラを一緒に創りませんか。スタートアップならではのスピード感と確かな専門性を持つチームで挑戦できます。',
     url: 'https://www.opinio.co.jp/recruit/',
     images: [{ url: 'https://www.opinio.co.jp/images/ogp.png', width: 1200, height: 630 }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: '採用情報 | 株式会社Opinio',
-    description: 'AI時代のキャリアインフラを一緒に創りませんか。',
-    images: ['https://www.opinio.co.jp/images/ogp.png'],
   },
 }
 
@@ -27,8 +19,15 @@ export const revalidate = 60
 
 const cultureValues = [
   { en: 'The Dream Team', ja: '最高のチームを作る', desc: '少数精鋭のチームで、互いを高め合いながら成長できる環境' },
-  { en: 'Truth First', ja: '真実を最優先に', desc: 'オープンなコミュニケーションと、率直なフィードバック文化' },
-  { en: 'Think Big', ja: '大きく考える', desc: '大きな目標に向かって、裁量を持ってチャレンジできる環境' },
+  { en: 'Truth First',    ja: '真実を最優先に',     desc: 'オープンなコミュニケーションと、率直なフィードバック文化' },
+  { en: 'Think Big',      ja: '大きく考える',       desc: '大きな目標に向かって、裁量を持ってチャレンジできる環境' },
+]
+
+const perks = [
+  { label: '完全リモート可', desc: '東京・赤坂オフィスとフルリモートのハイブリッド' },
+  { label: '裁量労働制',     desc: 'アウトプットで評価。時間ではなく成果にフォーカス' },
+  { label: '副業OK',        desc: '業務に支障のない範囲で副業・兼業を認めています' },
+  { label: '少数精鋭',       desc: 'フラットな組織。代表と直接議論できる距離感' },
 ]
 
 export default async function RecruitPage() {
@@ -50,110 +49,139 @@ export default async function RecruitPage() {
         { name: '採用情報', url: 'https://www.opinio.co.jp/recruit/' },
       ]} />
 
-      <PageHeader subtitle="RECRUIT" title="採用情報" description="一緒にAI時代のキャリアインフラを創りませんか" />
+      {/* ── PAGE HEADER ── */}
+      <section style={{ background: '#fff', borderBottom: '1px solid #000', padding: '80px 0 72px' }}>
+        <div className="container-v3">
+          <p style={{
+            fontFamily: 'var(--font-mono), monospace',
+            fontSize: 11, color: '#999',
+            letterSpacing: '0.22em', textTransform: 'uppercase', marginBottom: 20,
+          }}>RECRUIT</p>
+          <h1 style={{
+            fontFamily: 'var(--font-display), Georgia, serif',
+            fontWeight: 700, fontSize: 'clamp(36px, 5vw, 64px)',
+            lineHeight: 1.05, letterSpacing: '-0.03em', color: '#000', marginBottom: 20,
+          }}>採用情報</h1>
+          <p style={{ fontSize: 17, color: '#555', lineHeight: 1.8, maxWidth: 480 }}>
+            一緒にAI時代のキャリアインフラを創りませんか
+          </p>
+        </div>
+      </section>
 
-      {/* Culture & Values */}
-      <section className="section-v3">
+      {/* ── 01 CULTURE ── */}
+      <section style={{ padding: '100px 0', background: '#fff', borderBottom: '1px solid #E0E0E0' }}>
         <div className="container-v3">
           <ScrollReveal>
-            <div className="section-mark">
-              <span className="section-mark-num">01</span>
-              <div className="section-mark-line" />
-            </div>
-            <p className="section-eyebrow">CULTURE</p>
-            <h2 className="section-title-v3">Opinioで働く</h2>
-            <p className="section-subtitle-v3" style={{ marginTop: 12 }}>
+            <p style={{
+              fontFamily: 'var(--font-mono), monospace',
+              fontSize: 11, color: '#999',
+              letterSpacing: '0.22em', textTransform: 'uppercase', marginBottom: 20,
+            }}>01 — CULTURE</p>
+            <h2 style={{
+              fontFamily: 'var(--font-display), Georgia, serif',
+              fontWeight: 700, fontSize: 'clamp(28px, 3.6vw, 48px)',
+              lineHeight: 1.15, letterSpacing: '-0.025em', color: '#000', marginBottom: 20,
+            }}>OPINIOで働く</h2>
+            <p style={{ fontSize: 16, color: '#555', lineHeight: 1.9, maxWidth: 600, marginBottom: 56 }}>
               私たちは「AI時代のキャリアインフラになる」というミッションのもと、HR領域の課題解決に取り組んでいます。
               スタートアップならではのスピード感と、確かな専門性を持つチームで、大きなインパクトを生み出す仕事に挑戦できます。
             </p>
           </ScrollReveal>
 
-          <ScrollReveal delay={150}>
-            <div style={{ background: 'var(--bg-dark)', borderRadius: 12, padding: '48px 40px', marginTop: 48 }}>
-              <div className="grid md:grid-cols-3 gap-8">
-                {cultureValues.map((v) => (
-                  <div key={v.en}>
-                    <p style={{ fontFamily: 'var(--font-mono), monospace', fontSize: 11, color: 'var(--accent-light)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 }}>
-                      {v.en}
-                    </p>
-                    <h3 style={{ fontSize: 15, fontWeight: 600, color: 'white', marginBottom: 10 }}>{v.ja}</h3>
-                    <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', lineHeight: 1.75 }}>{v.desc}</p>
-                  </div>
-                ))}
-              </div>
+          {/* Values */}
+          <ScrollReveal delay={60}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 0, border: '1px solid #000', marginBottom: 48 }}>
+              {cultureValues.map((v, i) => (
+                <div key={v.en} style={{
+                  padding: '40px 36px',
+                  borderRight: i < cultureValues.length - 1 ? '1px solid #000' : 'none',
+                }}>
+                  <p style={{
+                    fontFamily: 'var(--font-mono), monospace',
+                    fontSize: 10, color: '#999',
+                    letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 14,
+                  }}>{v.en}</p>
+                  <h3 style={{ fontSize: 16, fontWeight: 700, color: '#000', marginBottom: 12 }}>{v.ja}</h3>
+                  <p style={{ fontSize: 13, color: '#666', lineHeight: 1.8 }}>{v.desc}</p>
+                </div>
+              ))}
+            </div>
+          </ScrollReveal>
+
+          {/* Perks */}
+          <ScrollReveal delay={80}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
+              {perks.map((p) => (
+                <div key={p.label} style={{
+                  background: '#F5F5F5',
+                  padding: '28px 28px',
+                  borderLeft: '3px solid #000',
+                }}>
+                  <p style={{ fontSize: 14, fontWeight: 700, color: '#000', marginBottom: 8 }}>{p.label}</p>
+                  <p style={{ fontSize: 13, color: '#666', lineHeight: 1.7 }}>{p.desc}</p>
+                </div>
+              ))}
             </div>
           </ScrollReveal>
         </div>
       </section>
 
-      {/* Open Positions */}
-      <section style={{ padding: '80px 0', background: 'var(--accent-soft)' }}>
+      {/* ── 02 OPEN POSITIONS ── */}
+      <section style={{ padding: '100px 0', background: '#F5F5F5', borderBottom: '1px solid #E0E0E0' }}>
         <div className="container-v3">
           <ScrollReveal>
-            <div className="section-mark">
-              <span className="section-mark-num">02</span>
-              <div className="section-mark-line" />
-            </div>
-            <p className="section-eyebrow">OPEN POSITIONS</p>
-            <h2 className="section-title-v3">募集中の職種</h2>
+            <p style={{
+              fontFamily: 'var(--font-mono), monospace',
+              fontSize: 11, color: '#999',
+              letterSpacing: '0.22em', textTransform: 'uppercase', marginBottom: 20,
+            }}>02 — OPEN POSITIONS</p>
+            <h2 style={{
+              fontFamily: 'var(--font-display), Georgia, serif',
+              fontWeight: 700, fontSize: 'clamp(28px, 3.6vw, 48px)',
+              lineHeight: 1.15, letterSpacing: '-0.025em', color: '#000', marginBottom: 48,
+            }}>募集中の職種</h2>
           </ScrollReveal>
 
-          <div style={{ marginTop: 48, maxWidth: 800 }}>
+          <div style={{ maxWidth: 800 }}>
             {publishedJobs.length > 0 ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 0, border: '1px solid #000' }}>
                 {publishedJobs.map((job, i) => (
                   <ScrollReveal key={job.id} delay={i * 60}>
-                    <Link
-                      href={`/recruit/${job.slug}/`}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        gap: 16,
-                        padding: '24px 32px',
-                        background: 'var(--bg-card)',
-                        border: '1px solid var(--border)',
-                        borderRadius: 10,
-                        textDecoration: 'none',
-                        transition: 'border-color 0.2s, box-shadow 0.2s',
-                      }}
-                    >
+                    <Link href={`/recruit/${job.slug}/`} style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      gap: 16, padding: '28px 36px',
+                      background: '#fff',
+                      borderBottom: i < publishedJobs.length - 1 ? '1px solid #D0D0D0' : 'none',
+                      textDecoration: 'none',
+                    }}>
                       <div>
-                        <h3 style={{ fontSize: 16, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 8 }}>
-                          {job.title}
-                        </h3>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, fontSize: 13, color: 'var(--text-muted)' }}>
-                          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                            <Building2 style={{ width: 14, height: 14 }} />{job.department}
-                          </span>
-                          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                            <Clock style={{ width: 14, height: 14 }} />{job.type}
-                          </span>
-                          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                            <MapPin style={{ width: 14, height: 14 }} />{job.location}
-                          </span>
+                        <h3 style={{ fontSize: 16, fontWeight: 700, color: '#000', marginBottom: 8 }}>{job.title}</h3>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, fontSize: 13, color: '#999' }}>
+                          <span>{job.department}</span>
+                          <span>{job.type}</span>
+                          <span>{job.location}</span>
                         </div>
                       </div>
-                      <span style={{ fontFamily: 'var(--font-mono), monospace', fontSize: 18, color: 'var(--accent)', flexShrink: 0 }}>→</span>
+                      <span style={{ fontFamily: 'var(--font-mono), monospace', fontSize: 18, color: '#000', flexShrink: 0 }}>→</span>
                     </Link>
                   </ScrollReveal>
                 ))}
               </div>
             ) : (
-              <ScrollReveal delay={100}>
+              <ScrollReveal delay={80}>
                 <div style={{
-                  background: 'var(--bg-card)',
-                  border: '1px solid var(--border)',
-                  borderRadius: 12,
-                  padding: '64px 40px',
-                  textAlign: 'center',
+                  background: '#fff', border: '1px solid #D0D0D0',
+                  padding: '64px 40px', textAlign: 'center',
                 }}>
-                  <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
-                    <Users style={{ width: 24, height: 24, color: 'var(--accent)' }} />
-                  </div>
-                  <p style={{ fontSize: 15, fontWeight: 500, color: 'var(--text-primary)', marginBottom: 8 }}>現在、募集中の求人はありません</p>
-                  <p style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-                    カジュアル面談は随時受け付けています。<br />ご興味のある方はお問い合わせください。
+                  <p style={{
+                    fontFamily: 'var(--font-mono), monospace',
+                    fontSize: 11, color: '#bbb', letterSpacing: '0.15em', marginBottom: 20,
+                  }}>NO OPENINGS</p>
+                  <p style={{ fontSize: 15, fontWeight: 600, color: '#000', marginBottom: 12 }}>
+                    現在、公開中の募集はありません
+                  </p>
+                  <p style={{ fontSize: 14, color: '#777', lineHeight: 1.8 }}>
+                    カジュアル面談は随時受け付けています。<br />ご興味のある方はお気軽にご連絡ください。
                   </p>
                 </div>
               </ScrollReveal>
@@ -162,21 +190,24 @@ export default async function RecruitPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section style={{ padding: '80px 0', background: 'var(--bg-dark)' }}>
-        <div className="container-v3" style={{ textAlign: 'center' }}>
+      {/* ── CTA ── */}
+      <section style={{ background: '#000', padding: '100px 0', textAlign: 'center' }}>
+        <div className="container-v3">
           <ScrollReveal>
-            <p style={{ fontFamily: 'var(--font-mono), monospace', fontSize: 11, color: 'var(--accent-light)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 16 }}>
-              CASUAL MEETING
+            <p style={{
+              fontFamily: 'var(--font-mono), monospace',
+              fontSize: 11, color: '#555', letterSpacing: '0.22em', textTransform: 'uppercase', marginBottom: 24,
+            }}>CASUAL MEETING</p>
+            <h2 style={{
+              fontFamily: 'var(--font-display), Georgia, serif',
+              fontWeight: 700, fontSize: 'clamp(28px, 4vw, 52px)',
+              lineHeight: 1.15, letterSpacing: '-0.025em',
+              color: '#fff', marginBottom: 20,
+            }}>カジュアル面談、受付中</h2>
+            <p style={{ fontSize: 15, color: '#888', lineHeight: 1.85, marginBottom: 48, maxWidth: 480, margin: '0 auto 48px' }}>
+              募集職種に関わらず、OPINIOに興味をお持ちの方との面談を随時受け付けています。まずはお気軽にご連絡ください。
             </p>
-            <h2 style={{ fontFamily: 'var(--font-display), Georgia, serif', fontSize: 'clamp(26px, 4vw, 40px)', fontWeight: 500, color: 'white', lineHeight: 1.35, marginBottom: 16 }}>
-              カジュアル面談受付中
-            </h2>
-            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', marginBottom: 40, lineHeight: 1.7 }}>
-              募集職種に関わらず、Opinioに興味をお持ちの方との面談を随時受け付けています。<br />
-              まずはお気軽にご連絡ください。
-            </p>
-            <Link href="/contact/" className="btn-v3 btn-v3-large btn-v3-on-green-primary">
+            <Link href="/contact/" className="btn-v3 btn-v3-large btn-v3-on-black">
               お問い合わせ →
             </Link>
           </ScrollReveal>
