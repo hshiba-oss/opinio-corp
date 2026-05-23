@@ -121,56 +121,68 @@ export default async function Home() {
             </h2>
           </div>
 
-          {/* Logo grid — DB images when available, text fallback otherwise */}
-          {consultingLogos.length > 0 ? (
-            <div className="logo-grid-v3" style={{
-              display: 'grid',
-              gap: 1, background: '#D0D0D0',
-              border: '1px solid #D0D0D0',
-            }}>
-              {consultingLogos.map((logo) => (
-                <div key={logo.id} style={{
-                  background: '#fff', aspectRatio: '2/1',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={logo.imageUrl} alt={logo.name}
-                    style={{ maxHeight: '55%', maxWidth: '72%', objectFit: 'contain', filter: 'grayscale(100%)' }} />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="logo-grid-v3" style={{
-              display: 'grid',
-              gap: 1, background: '#DEDEDE',
-              border: '1px solid #DEDEDE',
-            }}>
-              {[
-                'Sansan','HENNGE','Loglass','Speee','Stockmark','LAPRAS','TerraDrone','ROUTE06','Newji',
-                'Mobility','CADDi','SmartHR','freee','CrowdWorks','RevComm','Aigent','Hacobu','PR TIMES',
-                'Yappli','MoneyForward','UPWARD','Voicy','LayerX','Notion JP','10X','Algoage','Datable',
-                'Coral','Helpfeel','Asobica','Aill','Estie','Findy','QuickSnap','Caster','Tebiki',
-              ].map((name) => (
-                <div key={name} style={{
-                  background: '#fff',
-                  aspectRatio: '2/1',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontFamily: 'var(--font-sans), sans-serif',
-                  fontSize: 11,
-                  fontWeight: 600,
-                  color: '#555',
-                  letterSpacing: '0.02em',
-                  textAlign: 'center',
-                  padding: '0 6px',
-                  transition: 'background 0.2s, color 0.2s',
-                }}>
-                  {name}
-                </div>
-              ))}
-            </div>
-          )}
+          {/* Logo grid — カラーロゴ画像 */}
+          <div className="logo-grid-v3" style={{
+            display: 'grid',
+            gap: 1, background: '#E8E8E8',
+            border: '1px solid #E8E8E8',
+          }}>
+            {[
+              { file: 'sansan.png',       name: 'Sansan' },
+              { file: 'hennge.png',       name: 'HENNGE' },
+              { file: 'loglass.png',      name: 'Loglass' },
+              { file: 'caddi.png',        name: 'CADDi' },
+              { file: 'estie.png',        name: 'Estie' },
+              { file: 'laprass.png',      name: 'LAPRAS' },
+              { file: 'terradrone.png',   name: 'TerraDrone' },
+              { file: 'revcomm.png',      name: 'RevComm' },
+              { file: 'tebiki.png',       name: 'Tebiki' },
+              { file: 'plaid.png',        name: 'Plaid' },
+              { file: 'upsider.png',      name: 'Upsider' },
+              { file: 'micoworks.png',    name: 'MicoWorks' },
+              { file: 'xmile.png',        name: 'X Mile' },
+              { file: 'talentx.png',      name: 'TalentX' },
+              { file: 'skillnote.png',    name: 'Skillnote' },
+              { file: 'smaregi.png',      name: 'Smaregi' },
+              { file: 'plex.png',         name: 'Plex' },
+              { file: 'nexta.png',        name: 'Nexta' },
+              { file: 'mntsq.jpg',        name: 'MNTSQ' },
+              { file: 'leverages.svg',    name: 'Leverages' },
+              { file: 'leadingmark.png',  name: 'Leadingmark' },
+              { file: 'ingage.png',       name: 'Ingage' },
+              { file: 'trustdock.jpg',    name: 'Trustdock' },
+              { file: 'softbrain.jpg',    name: 'Softbrain' },
+              { file: 'smart-soudan.png', name: 'SmartSoudan' },
+              { file: 'salesnow.jpeg',    name: 'SalesNow' },
+              { file: 'batonz.png',       name: 'バトンズ' },
+              { file: 'archivillage.png', name: 'Archivillage' },
+              { file: 'plan-b.png',       name: 'Plan-B' },
+              { file: 'epicbase.jpeg',    name: 'EpicBase' },
+              { file: 'connexion.jpg',    name: 'Connexion' },
+              { file: 'hurray3.png',      name: 'Hurray3' },
+            ].map((logo) => (
+              <div key={logo.name + logo.file} style={{
+                background: '#fff',
+                aspectRatio: '2/1',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '12px 16px',
+              }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/images/logos/${logo.file}`}
+                  alt={logo.name}
+                  style={{
+                    maxHeight: '52%',
+                    maxWidth: '75%',
+                    objectFit: 'contain',
+                    display: 'block',
+                  }}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
